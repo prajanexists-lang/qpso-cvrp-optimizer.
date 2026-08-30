@@ -1,40 +1,40 @@
-# 🚚 QuantumFleet: Quantum-Inspired CVRP Route Optimizer
+# Quantum-Behaved Particle Swarm Optimization for CVRP
 
-> Intelligent logistics route optimization for the Capacitated Vehicle Routing Problem (CVRP) using physics-inspired Quantum Particle Swarm Optimization (QPSO).
-
----
-
-## 📌 Problem Overview
-In modern logistics and last-mile delivery, assigning delivery trucks to hundreds of customer stops while respecting vehicle weight limits is an **NP-hard combinatorial problem**. 
-
-Suboptimal routes lead to:
-- Excessive fuel consumption and carbon emissions.
-- Inefficient fleet utilization (sending 8 trucks when 5 would suffice).
-- Increased delivery delays and operational costs.
+A metaheuristic optimization engine applying Quantum-Behaved Particle Swarm Optimization (QPSO) and Gaussian Attractor QPSO (GAQPSO) to the Capacitated Vehicle Routing Problem (CVRP).
 
 ---
 
-## 💡 The Solution: How It Works (In Plain English)
+## Overview
 
-Traditional routing methods test one route at a time or get stuck in traffic bottlenecks. **QuantumFleet** uses a quantum-inspired search engine:
+The Capacitated Vehicle Routing Problem (CVRP) is an NP-hard combinatorial optimization problem where a fleet of delivery vehicles with uniform capacity must service a set of customers with known demands from a central depot at minimum operational travel cost.
 
-1. **Continuous Priorities (LOV Rule):** Instead of manually swapping stops, each customer is assigned a priority score. Sorting these numbers gives the optimal visit sequence.
-2. **Greedy Fleet Packing:** Trucks are loaded up to their maximum capacity (e.g., 80 units). Once a truck is full, a new truck departs from the central depot.
-3. **Quantum Swarm Search:** 40 virtual "particles" explore millions of route permutations simultaneously. By simulating quantum wave-packet collapse, particles can "tunnel" through bad routes to discover optimal global paths.
+This implementation adapts continuous quantum-behaved swarm mechanics to discrete permutation spaces using priority-based rank decoding.
 
 ---
 
-## 🚀 Key Features & Impact
-- **~25–35% Cost Reduction:** Consistently beats random and classical heuristics on total travel distance.
-- **Dynamic Fleet Sizing:** Automatically determines the minimum number of vehicles needed.
-- **Dual Solver Modes:**
-  - **Delta-Well QPSO:** High global exploration for complex, scattered customer maps.
-  - **Gaussian Attractor QPSO (GAQPSO):** Ultra-smooth, rapid convergence for clustered urban delivery zones.
+## Key Components
+
+- **Continuous-to-Discrete Mapping:** Uses the Largest Order Value (LOV) rule (`np.argsort`) to transform continuous particle coordinates into discrete customer visitation sequences.
+- **Greedy Capacity Partitioning:** Partitions the decoded customer sequence into valid sub-routes subject to vehicle capacity constraints.
+- **Delta-Well QPSO:** Position sampling based on the wave function solution of the Schrödinger equation with a delta potential well (Laplace distribution sampling via $\ln(1/u)$).
+- **Gaussian Attractor Variant (GAQPSO):** Normal distribution sampling centered at the local attractor $p_{\text{local}}$ to eliminate late-stage oscillation around sharp distribution peaks.
 
 ---
 
-## 🛠️ Quickstart
+## Project Structure
 
-### Prerequisites
+- `solver.py`: Complete implementation containing the `QPSOSolver` class, LOV decoder, test instance generator, and benchmarking execution.
+- `TECHNICAL_SPEC.md`: Formal mathematical definitions, objective functions, quantum wave mechanics, and derivations.
+
+---
+
+## Quickstart
+
+### Requirements
+- Python 3.8+
+- NumPy
+- Matplotlib
+
+### Installation
 ```bash
 pip install numpy matplotlib
