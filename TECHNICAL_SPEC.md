@@ -88,9 +88,17 @@ This ensures smooth asymptotic exploitation during late iterations as $\alpha \t
 
 ---
 
-### 6. Academic References
 
-1. **Sun, J., Choi, B., & Xu, W. (2004).** *A quantum particle swarm optimization with a hybrid mean best position.* Proceedings of the 2004 IEEE Congress on Evolutionary Computation (CEC), 1, 603–609.
-2. **Sun, J., Fang, W., Wu, X., Xie, V., & Xu, W. (2012).** *Quantum-behaved particle swarm optimization: analysis of individual particle behavior and parameter selection.* IEEE Transactions on Evolutionary Computation, 16(1), 74–93.
-3. **Sun, J., Wu, X., Palade, V., Fang, W., Lai, C. H., & Xu, W. (2011).** *Quantum-behaved particle swarm optimization with Gaussian distributed local attractor point.* Applied Mathematics and Computation, 218(7), 3763–3775.
-4. **Toth, P., & Vigo, D. (2014).** *Vehicle Routing: Problems, Methods, and Applications.* Society for Industrial and Applied Mathematics (SIAM).
+### 6. Academic References & Paper Links
+
+1. **Foundational Delta-Well QPSO Paper:**  
+   Sun, J., Feng, B., & Xu, W. (2004). *Particle Swarm Optimization with Particles Having Quantum Behavior.* IEEE Congress on Evolutionary Computation (CEC).  
+   🔗 [DOI: 10.1109/CEC.2004.1330875](https://doi.org/10.1109/CEC.2004.1330875) | [Semantic Scholar Record](https://www.semanticscholar.org/paper/Particle-swarm-optimization-with-particles-having-Sun-Feng/15f584ac30e372455a6d164454679b6e8e29ae16)
+
+2. **GAQPSO (Gaussian Attractor) Paper:**  
+   Sun, J., Wu, X., Palade, V., Fang, W., Lai, C. H., & Xu, W. (2012). *Quantum-behaved particle swarm optimization with Gaussian distributed local attractor point.* Applied Mathematics and Computation, 218(7), 3763–3775.  
+   🔗 [Open Access PDF (Oxford Research Archive)](https://ora.ox.ac.uk/objects/uuid:770f2b6a-c31e-40b6-b043-e8be6dd518df/download_file?safe_filename=AMC.pdf&file_format=application%2Fpdf&type_of_work=Journal+article) | [ScienceDirect Link](https://doi.org/10.1016/j.amc.2011.09.020)
+
+3. **Convergence & Theoretical Analysis:**  
+   Sun, J., Fang, W., Wu, X., Xie, V., & Xu, W. (2012). *Quantum-behaved particle swarm optimization: analysis of individual particle behavior and parameter selection.* IEEE Transactions on Evolutionary Computation, 16(1), 74–93.  
+   🔗 [DOI: 10.1109/TEVC.2010.2096509](https://doi.org/10.1109/TEVC.2010.2096509) | [ArXiv Open Preprint](https://arxiv.org/pdf/2308.04840)
