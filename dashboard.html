@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Fleet Optimizer | QPSO CVRP Engine</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        quantum: {
+                            cyan: "#06b6d4",
+                            emerald: "#10b981",
+                            violet: "#a855f7",
+                            amber: "#f59e0b",
+                            rose: "#f43f5e"
+                        }
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        mono: ["JetBrains Mono", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- KaTeX CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: \"$$\", right: \"$$\", display: true},
+                {left: \"$\", right: \"$\", display: false}
+            ],
+            throwOnError: false
+        });"></script>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col font-sans selection:bg-cyan-500/20 selection:text-cyan-900">
+
+    <!-- TOP HEADER -->
+    <header class="h-16 border-b border-slate-200/80 bg-white/95 backdrop-blur-md px-4 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+        <!-- Logo & Title -->
+        <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-indigo-500 to-purple-600 p-0.5 shadow-sm">
+                <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                    <i data-lucide="atom" class="w-5 h-5 text-cyan-600"></i>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <h1 class="font-bold text-base md:text-lg tracking-tight text-slate-900">
+                        Quantum Fleet Optimizer
+                    </h1>
+                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+                        QPSO CVRP
+                    </span>
+                </div>
+                <p class="text-xs text-slate-500 hidden sm:block">Quantum-Behaved Particle Swarm Optimization for Capacitated Vehicle Routing</p>
+            </div>
+        </a>
+
+        <!-- Center Nav Links -->
+        <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+            <a href="index.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Home</a>
+            <a href="dashboard.html" class="px-3.5 py-1.5 rounded-full bg-cyan-50 text-cyan-700 font-semibold border border-cyan-100">Dashboard</a>
+            <a href="about.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">About</a>
+            <a href="docs.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Docs</a>
+        </nav>
+
+        <!-- Status & Telemetry Header Badges -->
+        <div class="flex items-center space-x-2.5">
+            <!-- Hardware / Emulation Mode Chip -->
+            <div class="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 beacon-pulse"></span>
+                <span class="text-xs font-medium text-slate-600">Engine:</span>
+                <span class="text-xs font-mono font-semibold text-emerald-700">Classical / QPU Emulated</span>
+            </div>
+
+            <!-- Sound Toggle Button -->
+            <button id="soundToggleBtn" class="p-2 rounded-lg bg-white border border-slate-200 text-slate-500 hover:text-cyan-600 hover:border-slate-300 transition shadow-xs" title="Toggle Synthesized Audio">
+                <i data-lucide="volume-2" class="w-4 h-4" id="soundIcon"></i>
+            </button>
+
+            <!-- Math Formulation Spec Modal Button -->
+            <button id="openMathModalBtn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-700 hover:text-slate-900 hover:border-slate-300 transition shadow-xs">
+                <i data-lucide="sigma" class="w-4 h-4 text-purple-600"></i>
+                <span class="hidden sm:inline">Formulation</span>
+            </button>
+
+            <!-- Export Button -->
+            <button id="openExportModalBtn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-cyan-50 border border-cyan-200 text-xs font-semibold text-cyan-700 hover:bg-cyan-100 transition shadow-xs">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span>Export</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER (Sidebar + Workspace) -->
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+        
+        <!-- SIDEBAR / CONTROL PANEL (Left, 320px) -->
+        <aside class="w-full lg:w-80 bg-white border-r border-slate-200/90 flex flex-col shrink-0 overflow-y-auto p-4 space-y-5 shadow-xs">
+            
+            <!-- Problem Instance Selector -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 flex items-center justify-between">
+                    <span>Problem Instance</span>
+                    <span class="text-[11px] font-mono text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded border border-cyan-200" id="instanceDimBadge">32 Nodes (k=5)</span>
+                </label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button class="instance-btn p-2.5 rounded-lg text-left border transition relative overflow-hidden bg-cyan-50/80 border-cyan-400 text-slate-900 shadow-xs" data-instance="A-n32-k5">
+                        <div class="font-bold text-xs">A-n32-k5</div>
+                        <div class="text-[10px] text-slate-500">Augerat 1995</div>
+                    </button>
+                    <button class="instance-btn p-2.5 rounded-lg text-left border transition relative overflow-hidden bg-slate-50 border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900" data-instance="Dynamic-City-40">
+                        <div class="font-bold text-xs">Dynamic City</div>
+                        <div class="text-[10px] text-slate-500">41 Nodes Grid</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Algorithm Selector -->
+            <div class="space-y-2">
+                <label class="text-xs font-semibold text-slate-700 flex items-center justify-between">
+                    <span>Optimization Algorithm</span>
+                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-purple-600"></i>
+                </label>
+                <select id="algorithmSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-cyan-600 cursor-pointer shadow-xs">
+                    <option value="GAQPSO" selected>GAQPSO (Gaussian Attractor QPSO)</option>
+                    <option value="DELTA_QPSO">Delta-Well QPSO (Sun et al. 2004)</option>
+                    <option value="CLASSICAL_PSO">Classical PSO (Kennedy & Eberhart)</option>
+                </select>
+            </div>
+
+            <!-- Hyperparameter Sliders -->
+            <div class="space-y-4 pt-2 border-t border-slate-200">
+                <div class="text-xs font-semibold uppercase tracking-wider text-[11px] text-slate-500">
+                    Swarm Hyperparameters
+                </div>
+
+                <!-- Swarm Size (M) -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-600 font-medium">Swarm Size (M):</span>
+                        <span id="valSwarmSize" class="font-mono font-bold text-cyan-700 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">40</span>
+                    </div>
+                    <input type="range" id="sliderSwarmSize" min="20" max="100" step="5" value="40" class="w-full">
+                </div>
+
+                <!-- Max Iterations (t_max) -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-600 font-medium">Max Iterations (t_max):</span>
+                        <span id="valMaxIter" class="font-mono font-bold text-cyan-700 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">200</span>
+                    </div>
+                    <input type="range" id="sliderMaxIter" min="50" max="500" step="10" value="200" class="w-full">
+                </div>
+
+                <!-- Vehicle Capacity Limit (Q) -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-600 font-medium">Capacity Limit (Q):</span>
+                        <span id="valCapacity" class="font-mono font-bold text-emerald-700 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">100</span>
+                    </div>
+                    <input type="range" id="sliderCapacity" min="50" max="150" step="5" value="100" class="w-full">
+                </div>
+
+                <!-- Contraction-Expansion (Alpha) -->
+                <div class="space-y-1.5">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-600 font-medium">Contraction Factor (α):</span>
+                        <span id="valAlpha" class="font-mono font-bold text-purple-700 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">0.85</span>
+                    </div>
+                    <input type="range" id="sliderAlpha" min="0.40" max="1.20" step="0.05" value="0.85" class="w-full">
+                </div>
+            </div>
+
+            <!-- Primary Action Button: Execute Optimization -->
+            <div class="pt-2 space-y-2">
+                <button id="runOptimizationBtn" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-500 via-teal-600 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-bold text-sm tracking-wide shadow-md shadow-teal-500/25 flex items-center justify-center space-x-2 transition transform active:scale-98">
+                    <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                    <span>Execute Optimization</span>
+                </button>
+
+                <!-- Multi-stage progress indicator -->
+                <div id="progressContainer" class="mt-3 space-y-1.5 hidden">
+                    <div class="flex justify-between text-[11px] font-mono text-slate-500">
+                        <span id="progressPhaseText">Sampling Potential Well...</span>
+                        <span id="progressPercentText" class="text-teal-600 font-bold">0%</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                        <div id="progressBarFill" class="h-full bg-teal-500 rounded-full transition-all duration-150 animate-shimmer" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantum Engine Telemetry / Specs Panel -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+                <div class="flex items-center space-x-1.5 text-teal-700 font-semibold">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <span>Engine Specifications</span>
+                </div>
+                <div class="space-y-1 text-slate-600 text-[11px] font-mono">
+                    <div class="flex justify-between">
+                        <span>Wavefunction:</span>
+                        <span class="text-slate-900 font-semibold">δ-Potential Well</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Attractor:</span>
+                        <span class="text-slate-900 font-semibold">Gaussian Stoch.</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Partitioning:</span>
+                        <span class="text-slate-900 font-semibold">Prins Split (O(n²))</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Local Search:</span>
+                        <span class="text-slate-900 font-semibold">Intra 2-Opt Polish</span>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="flex-1 flex flex-col overflow-y-auto p-4 lg:p-6 space-y-6">
+            
+            <!-- TOP KPI METRIC CARDS (4 Columns) -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <!-- KPI 1: Best Distance / Solution Cost -->
+                <div class="bg-white border border-slate-200/90 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-medium text-slate-500">Total Route Cost f(x)</span>
+                        <div class="p-1.5 rounded-lg bg-cyan-50 text-cyan-600">
+                            <i data-lucide="route" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-1.5 mt-2">
+                        <span id="kpiDistance" class="text-2xl font-bold font-mono text-slate-900 tracking-tight">788.42</span>
+                        <span class="text-xs text-slate-500 font-mono">km</span>
+                    </div>
+                    <div class="mt-2 flex items-center space-x-1.5 text-xs">
+                        <span class="text-slate-500">Initial:</span>
+                        <span id="kpiInitialCost" class="font-mono text-slate-700 font-medium">942.10</span>
+                        <span id="kpiDistanceDelta" class="font-mono font-semibold text-emerald-600 ml-auto">-16.3%</span>
+                    </div>
+                </div>
+
+                <!-- KPI 2: Optimality Gap vs Known BKS -->
+                <div class="bg-white border border-slate-200/90 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-medium text-slate-500">Optimality Gap vs BKS</span>
+                        <div class="p-1.5 rounded-lg bg-emerald-50 text-emerald-600">
+                            <i data-lucide="target" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-1.5 mt-2">
+                        <span id="kpiBksGap" class="text-2xl font-bold font-mono text-emerald-600 tracking-tight">+0.56%</span>
+                        <span class="text-xs text-slate-500 font-mono">gap</span>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-slate-500">
+                        <span>BKS Target: <span id="kpiBksTarget" class="font-mono text-slate-700 font-semibold">784.00</span></span>
+                        <span id="kpiBksStatus" class="font-mono text-emerald-700 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Near Optimal</span>
+                    </div>
+                </div>
+
+                <!-- KPI 3: Vehicles Dispatched / Active Fleet -->
+                <div class="bg-white border border-slate-200/90 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-medium text-slate-500">Vehicles Dispatched</span>
+                        <div class="p-1.5 rounded-lg bg-purple-50 text-purple-600">
+                            <i data-lucide="truck" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-1.5 mt-2">
+                        <span id="kpiVehicles" class="text-2xl font-bold font-mono text-slate-900 tracking-tight">5 / 5</span>
+                        <span class="text-xs text-slate-500 font-mono">active</span>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-slate-500">
+                        <span>Avg Load: <span id="kpiAvgLoad" class="font-mono text-slate-700 font-semibold">96.8%</span></span>
+                        <span class="font-mono text-cyan-700 font-medium bg-cyan-50 px-1.5 py-0.5 rounded border border-cyan-200">0 Violations</span>
+                    </div>
+                </div>
+
+                <!-- KPI 4: Solver Runtime & Quantum Jumps -->
+                <div class="bg-white border border-slate-200/90 rounded-xl p-4 shadow-sm relative overflow-hidden">
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-medium text-slate-500">Execution Runtime</span>
+                        <div class="p-1.5 rounded-lg bg-amber-50 text-amber-600">
+                            <i data-lucide="timer" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-1.5 mt-2">
+                        <span id="kpiTime" class="text-2xl font-bold font-mono text-slate-900 tracking-tight">842</span>
+                        <span class="text-xs text-slate-500 font-mono">ms</span>
+                    </div>
+                    <div class="mt-2 flex items-center justify-between text-xs text-slate-500">
+                        <span>Tunnel Jumps: <span id="kpiTunnelingCount" class="font-mono text-amber-600 font-semibold">18</span></span>
+                        <span class="font-mono text-slate-500">2.8k eval/s</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- MIDDLE SECTION: 2D ROUTE CANVAS + CONVERGENCE PROFILE -->
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                
+                <!-- 2D ROUTE CANVAS VISUALIZER (7 Columns) -->
+                <div class="xl:col-span-7 bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex flex-col space-y-3 min-h-[420px]">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-cyan-600"></i>
+                            <h2 class="font-semibold text-sm text-slate-900">Dynamic 2D Fleet Route Matrix</h2>
+                            <span id="canvasNodeCount" class="text-[11px] font-mono text-slate-600 px-2 py-0.5 rounded bg-slate-100 border border-slate-200">
+                                32 Customer Nodes
+                            </span>
+                        </div>
+
+                        <!-- Canvas Controls (Zoom / Pan / Reset) -->
+                        <div class="flex items-center space-x-1.5">
+                            <button id="zoomInBtn" class="p-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition" title="Zoom In">
+                                <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button id="zoomOutBtn" class="p-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition" title="Zoom Out">
+                                <i data-lucide="zoom-out" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button id="resetViewBtn" class="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Filter Buttons Bar -->
+                    <div id="vehicleFilterContainer" class="flex flex-wrap items-center gap-1.5 pt-1">
+                        <button class="vehicle-filter-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition bg-cyan-50 text-cyan-700 border border-cyan-300 shadow-xs" data-filter="all">
+                            All Vehicles (5)
+                        </button>
+                    </div>
+
+                    <!-- Canvas Stage -->
+                    <div class="relative flex-1 bg-slate-50/50 rounded-xl border border-slate-200 overflow-hidden min-h-[300px] flex items-center justify-center cursor-grab active:cursor-grabbing">
+                        <canvas id="routeCanvas" class="w-full h-full block"></canvas>
+                        
+                        <!-- Floating Node Hover Tooltip -->
+                        <div id="nodeTooltip" class="absolute z-20 w-52 p-2.5 rounded-xl bg-white border border-slate-300 shadow-xl opacity-0 pointer-events-none transition-opacity duration-150 text-xs"></div>
+                        
+                        <!-- Canvas Overlay HUD Legend -->
+                        <div class="absolute bottom-3 left-3 px-3 py-1.5 rounded-lg bg-white/95 border border-slate-200 text-[11px] font-mono text-slate-600 pointer-events-none flex items-center space-x-3 shadow-sm">
+                            <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded bg-cyan-600"></span><span class="font-semibold">Depot (82, 76)</span></span>
+                            <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-700"></span><span>Customer Demand</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REAL-TIME CONVERGENCE PROFILE (5 Columns) -->
+                <div class="xl:col-span-5 bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex flex-col space-y-3 min-h-[420px]">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="trending-down" class="w-4 h-4 text-purple-600"></i>
+                            <h2 class="font-semibold text-sm text-slate-900">Convergence Profile</h2>
+                        </div>
+                        <span class="text-[11px] font-mono text-slate-500 font-medium">t_max = 200</span>
+                    </div>
+
+                    <!-- Chart Container -->
+                    <div class="relative flex-1 bg-white rounded-xl border border-slate-100 p-2 min-h-[260px]">
+                        <canvas id="convergenceChart"></canvas>
+                    </div>
+
+                    <!-- Mini Stat Summary below Chart -->
+                    <div class="grid grid-cols-3 gap-2 pt-1">
+                        <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 text-center">
+                            <div class="text-[10px] text-slate-500 font-medium">Initial Cost</div>
+                            <div id="statInitialCost" class="font-mono text-xs font-bold text-slate-800">942.10</div>
+                        </div>
+                        <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 text-center">
+                            <div class="text-[10px] text-slate-500 font-medium">Best Found</div>
+                            <div id="statBestCost" class="font-mono text-xs font-bold text-teal-600">788.42</div>
+                        </div>
+                        <div class="p-2 rounded-lg bg-slate-50 border border-slate-200 text-center">
+                            <div class="text-[10px] text-slate-500 font-medium">Convergence</div>
+                            <div id="statConvergenceEpoch" class="font-mono text-xs font-bold text-purple-600">t = 142</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DEDICATED TABBED DATA TABLES SECTION -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm space-y-4">
+                
+                <!-- Table Header & Tab Switcher Bar -->
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+                    
+                    <!-- Left: Table Mode Tabs -->
+                    <div class="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button id="tabFleetBtn" class="table-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition bg-white text-cyan-800 border border-slate-200 shadow-xs" data-tab="fleet">
+                            <i data-lucide="layers" class="w-3.5 h-3.5 text-cyan-600"></i>
+                            <span>Fleet Tour Manifest</span>
+                            <span id="tabFleetCount" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-100 text-cyan-800 ml-1">5</span>
+                        </button>
+                        
+                        <button id="tabNodesBtn" class="table-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition text-slate-600 hover:text-slate-900 hover:bg-slate-200/60" data-tab="nodes">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                            <span>Customer Directory</span>
+                            <span id="tabNodesCount" class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 ml-1">31</span>
+                        </button>
+
+                        <button id="tabBenchmarkBtn" class="table-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition text-slate-600 hover:text-slate-900 hover:bg-slate-200/60" data-tab="benchmark">
+                            <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 text-purple-600"></i>
+                            <span>Algorithm Benchmarks</span>
+                            <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-purple-100 text-purple-800 ml-1">3</span>
+                        </button>
+
+                        <button id="tabDeliveryBtn" class="table-tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition text-slate-600 hover:text-slate-900 hover:bg-slate-200/60" data-tab="delivery">
+                            <i data-lucide="clipboard-list" class="w-3.5 h-3.5 text-amber-600"></i>
+                            <span>Delivery Table</span>
+                            <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 ml-1">8</span>
+                        </button>
+                    </div>
+
+                    <!-- Right: Search & Table Summary -->
+                    <div class="flex items-center space-x-3">
+                        <div class="relative w-48 sm:w-64">
+                            <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="tableSearchInput" placeholder="Filter table rows..." class="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-cyan-600 focus:bg-white transition">
+                        </div>
+                        <span id="tableSummaryText" class="text-xs font-mono text-slate-500 hidden sm:inline">5 Vehicles • Demand: 410 / 500</span>
+                    </div>
+
+                </div>
+
+                <!-- TABLE 1: FLEET TOUR MANIFEST -->
+                <div id="panelFleetTable" class="table-panel overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 font-semibold font-mono uppercase text-[11px] bg-slate-50/50">
+                                <th class="py-2.5 px-3">Vehicle</th>
+                                <th class="py-2.5 px-3">Tour Sequence Path (0 ➔ Nodes ➔ 0)</th>
+                                <th class="py-2.5 px-3 text-center">Stops</th>
+                                <th class="py-2.5 px-3">Cargo Load Utilization</th>
+                                <th class="py-2.5 px-3 text-right">Distance (km)</th>
+                                <th class="py-2.5 px-3 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="manifestTableBody" class="divide-y divide-slate-100 font-mono text-slate-800">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE 2: CUSTOMER NODES DIRECTORY -->
+                <div id="panelNodesTable" class="table-panel overflow-x-auto hidden">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 font-semibold font-mono uppercase text-[11px] bg-slate-50/50">
+                                <th class="py-2.5 px-3">Node ID</th>
+                                <th class="py-2.5 px-3">Label / Sector</th>
+                                <th class="py-2.5 px-3">Coordinates (X, Y)</th>
+                                <th class="py-2.5 px-3">Demand (q_i)</th>
+                                <th class="py-2.5 px-3">Distance to Depot</th>
+                                <th class="py-2.5 px-3">Assigned Route</th>
+                                <th class="py-2.5 px-3 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nodesTableBody" class="divide-y divide-slate-100 font-mono text-slate-800">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE 3: ALGORITHM BENCHMARKS -->
+                <div id="panelBenchmarkTable" class="table-panel overflow-x-auto hidden">
+                    <div class="flex items-center justify-between mb-3 text-xs">
+                        <span class="text-slate-600">Comparative performance across metaheuristics on <strong id="benchmarkInstanceName" class="text-cyan-700">A-n32-k5</strong>:</span>
+                        <button id="runComparativeSuiteBtn" class="px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition flex items-center space-x-1.5 font-semibold shadow-xs">
+                            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                            <span>Run All 3 Algorithms</span>
+                        </button>
+                    </div>
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 font-semibold font-mono uppercase text-[11px] bg-slate-50/50">
+                                <th class="py-2.5 px-3">Algorithm Method</th>
+                                <th class="py-2.5 px-3">Wavefunction / Sampling</th>
+                                <th class="py-2.5 px-3 text-right">Best Distance f(x)</th>
+                                <th class="py-2.5 px-3 text-center">Optimality Gap</th>
+                                <th class="py-2.5 px-3 text-center">Vehicles</th>
+                                <th class="py-2.5 px-3 text-right">Runtime (ms)</th>
+                                <th class="py-2.5 px-3 text-center">Feasibility</th>
+                            </tr>
+                        </thead>
+                        <tbody id="benchmarkTableBody" class="divide-y divide-slate-100 font-mono text-slate-800">
+                            <!-- Populated dynamically via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE 4: DELIVERY TABLE (Expected Deliverables) -->
+                <div id="panelDeliveryTable" class="table-panel overflow-x-auto hidden">
+                    <div class="flex items-center justify-between mb-3 text-xs">
+                        <span class="text-slate-600">Expected Deliverables &mdash; <strong class="text-slate-900 font-bold">Quantum-Inspired Metaheuristic Optimization Framework</strong></span>
+                        <span class="text-[11px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">8 Deliverables</span>
+                    </div>
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-slate-500 font-semibold font-mono uppercase text-[11px] bg-slate-50/50">
+                                <th class="py-2.5 px-3 w-12">S.No</th>
+                                <th class="py-2.5 px-3">Deliverable</th>
+                                <th class="py-2.5 px-3">Description / Component Details</th>
+                                <th class="py-2.5 px-3 text-center">Type</th>
+                                <th class="py-2.5 px-3 text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-700">
+                            <!-- D1 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D1</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">QPSO Optimization Engine</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Complete implementation of Quantum Particle Swarm Optimization (GAQPSO, Delta-Well QPSO) with Prins Split decoder, 2-Opt local search, and classical PSO baseline.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">Software</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                            <!-- D2 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D2</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">Graph-Based Network Model</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Weighted graph representation G=(V, E) of transportation network with nodes (depot + customers), Euclidean distances, demand attributes q_i, and capacity constraints Q.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">Software</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                            <!-- D3 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D3</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">Mathematical Formulation</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Formal CVRP objective function minimization with capacity constraints, Schrödinger wave-equation particle updates, LOV permutation decoding, and Prins split DAG formulation.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">Academic</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                            <!-- D4 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D4</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">Constraint Handling Module</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Vehicle capacity enforcement (Σq_i ≤ Q per route), depot return enforcement, and demand-feasibility validation with 0-violation guarantee.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">Software</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                            <!-- D5 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D5</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">Convergence Analysis Dashboard</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Real-time convergence profile visualization: G_best trajectory, swarm mean fitness, BKS baseline overlay, and epoch tracking across iterations.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Visualization</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                            <!-- D6 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D6</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">Performance Benchmarking Suite</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Systematic comparative evaluation of GAQPSO vs Delta-Well QPSO vs Classical PSO across standardized Augerat (1995) benchmark instances.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Evaluation</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                            <!-- D7 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D7</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">2D Fleet Route Visualizer</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Interactive canvas-based route visualizer with animated vehicles, radar sweep, directional chevrons, demand rings, hover tooltips, and per-vehicle filtering.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Visualization</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                            <!-- D8 -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3 px-3 font-mono text-slate-500">D8</td>
+                                <td class="py-3 px-3 font-semibold text-slate-900">Scalability & Smart-City Demo</td>
+                                <td class="py-3 px-3 text-slate-600 max-w-md">Multi-instance support (A-n32-k5, Dynamic City) demonstrating scalability for smart-city logistics with tunable parameters and JSON/CSV export capabilities.</td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200">Evaluation</span></td>
+                                <td class="py-3 px-3 text-center"><span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Implemented</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- FORMULATION SPEC MODAL (LaTeX KaTeX rendered) -->
+    <div id="mathModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="w-full max-w-2xl bg-white rounded-2xl p-6 space-y-4 border border-slate-200 shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="sigma" class="w-5 h-5 text-purple-600"></i>
+                    <h3 class="font-bold text-base text-slate-900">QPSO CVRP Mathematical Formulation</h3>
+                </div>
+                <button id="closeMathModalBtn" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <div class="space-y-4 text-xs text-slate-700 leading-relaxed font-sans">
+                <div>
+                    <h4 class="font-semibold text-teal-700 mb-1">1. Capacitated Vehicle Routing Problem (CVRP)</h4>
+                    <p class="text-slate-600">Given a graph $G=(V, E)$ with depot $v_0$ and customers $V \setminus \{v_0\}$, demands $q_i$, vehicle capacity $Q$, find $K$ minimum-cost tours departing and returning to $v_0$:</p>
+                    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 my-2 text-center text-sm font-mono text-slate-900">
+                        $$\min \sum_{k=1}^K \sum_{(i,j) \in R_k} c_{ij}, \quad 	ext{s.t.} \sum_{i \in R_k} q_i \le Q \quad orall k \in \{1,\dots,K\}$$
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-purple-700 mb-1">2. Quantum Delta-Potential Well (Sun et al. 2004)</h4>
+                    <p class="text-slate-600">Particles follow Schrödinger wave equation with delta-potential well centered at attractor $p_i$:</p>
+                    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 my-2 text-center text-sm font-mono text-slate-900">
+                        $$p_{i,d}(t) = \phi \cdot P_{i,d}(t) + (1-\phi) \cdot G_d(t), \quad \phi \sim U(0,1)$$
+                        $$X_{i,d}(t+1) = p_{i,d}(t) \pm lpha \cdot |mbest_d(t) - X_{i,d}(t)| \cdot \ln\left(rac{1}{u}ight), \quad u \sim U(0, 1)$$
+                    </div>
+                    <p class="text-slate-600">Where Mean Best position is $mbest(t) = rac{1}{M}\sum_{i=1}^M P_i(t)$ and $lpha$ linearly decays from $lpha_{\max} 	o lpha_{\min}$.</p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-emerald-700 mb-1">3. Prins (2004) Optimal Split Decoder</h4>
+                    <p class="text-slate-600">Continuous swarm position vectors are sorted using Largest Order Value (LOV) to produce a giant tour permutation $\pi$. An auxiliary DAG is constructed where edge $(i, j)$ represents a valid feasible route from depot, serving $\pi_{i+1} \dots \pi_j$, with weight equal to route distance. Dijkstra / Bellman-Ford computes globally optimal fleet routes in $\mathcal{O}(n^2)$ time.</p>
+                </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-200 flex justify-end">
+                <button id="closeMathModalBottomBtn" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-800 transition">
+                    Close Specification
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXPORT MODAL -->
+    <div id="exportModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="w-full max-w-md bg-white rounded-2xl p-6 space-y-4 border border-slate-200 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="download" class="w-5 h-5 text-cyan-600"></i>
+                    <h3 class="font-bold text-base text-slate-900">Export Optimization Results</h3>
+                </div>
+                <button id="closeExportModalBtn" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-600">Export current optimal solution, telemetry history, and route manifests to disk:</p>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button id="exportJsonBtn" class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-cyan-400 hover:bg-cyan-50 text-left transition group space-y-1">
+                    <i data-lucide="file-json" class="w-5 h-5 text-cyan-600 mb-1"></i>
+                    <div class="font-semibold text-xs text-slate-800 group-hover:text-cyan-800">JSON Telemetry</div>
+                    <div class="text-[10px] text-slate-500">Complete swarm state & history</div>
+                </button>
+
+                <button id="exportCsvBtn" class="p-4 rounded-xl bg-slate-50 border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50 text-left transition group space-y-1">
+                    <i data-lucide="file-spreadsheet" class="w-5 h-5 text-emerald-600 mb-1"></i>
+                    <div class="font-semibold text-xs text-slate-800 group-hover:text-emerald-800">CSV Manifest</div>
+                    <div class="text-[10px] text-slate-500">Fleet route dispatch table</div>
+                </button>
+            </div>
+
+            <div id="exportCopyNotice" class="text-xs text-emerald-700 font-mono text-center hidden">
+                ✓ Export successfully downloaded and copied to clipboard!
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCRIPT BUNDLE -->
+    <script src="js/bundle.js"></script>
+</body>
+</html>

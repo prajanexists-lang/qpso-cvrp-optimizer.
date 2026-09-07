@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Fleet Optimizer | QPSO CVRP Engine</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#0f172a',
+                            925: '#070b14',
+                            950: '#030712'
+                        },
+                        quantum: {
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            violet: '#a855f7',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-white text-slate-900 min-h-screen flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-900">
+
+    <!-- TOP HEADER (Clean Light Theme) -->
+    <header class="h-16 border-b border-slate-200/80 bg-white/95 backdrop-blur-md px-4 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-xs">
+        <!-- Logo & Title -->
+        <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-indigo-500 to-purple-600 p-0.5 shadow-sm">
+                <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                    <i data-lucide="atom" class="w-5 h-5 text-cyan-600"></i>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <h1 class="font-bold text-base md:text-lg tracking-tight text-slate-900">
+                        Quantum Fleet Optimizer
+                    </h1>
+                    <span class="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+                        QPSO CVRP
+                    </span>
+                </div>
+                <p class="text-xs text-slate-500 hidden sm:block">QPSO CVRP Engine</p>
+            </div>
+        </a>
+
+        <!-- Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+            <a href="index.html" class="px-3.5 py-1.5 rounded-full bg-cyan-50 text-cyan-700 font-semibold border border-cyan-100">Home</a>
+            <a href="dashboard.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Dashboard</a>
+            <a href="about.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">About</a>
+            <a href="docs.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Docs</a>
+        </nav>
+
+        <!-- CTA Button -->
+        <div class="flex items-center">
+            <a href="dashboard.html" class="flex items-center space-x-1.5 px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-sm transition shadow-sm">
+                <span>Launch Dashboard</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Mobile Nav Sub-Bar -->
+    <div class="md:hidden flex items-center space-x-1 px-4 py-2 text-xs font-medium overflow-x-auto border-b border-slate-200 bg-white sticky top-16 z-20">
+        <a href="index.html" class="px-2.5 py-1 rounded-lg text-cyan-800 bg-cyan-50 font-semibold border border-cyan-200 whitespace-nowrap">Home</a>
+        <a href="dashboard.html" class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap">Dashboard</a>
+        <a href="about.html" class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap">About</a>
+        <a href="docs.html" class="px-2.5 py-1 rounded-lg text-slate-600 hover:bg-slate-50 whitespace-nowrap">Docs</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1">
+        <!-- Hero Section -->
+        <section class="py-20 px-6 max-w-5xl mx-auto text-center space-y-8">
+            <div class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold tracking-wide uppercase border border-amber-200">
+                ✨ SMART INDIA HACKATHON — QUANTUM-INSPIRED OPTIMIZATION
+            </div>
+            
+            <h2 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900">
+                Route your fleet like it's <br>
+                <span class="bg-gradient-to-r from-cyan-600 to-teal-500 bg-clip-text text-transparent">quantum-optimal</span>
+            </h2>
+            
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Quantum-Behaved Particle Swarm Optimization (QPSO) for the Capacitated Vehicle Routing Problem — a live solver, 2D radar visualizer, convergence analytics, and algorithm benchmarking suite, built for smart-city logistics at scale.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="dashboard.html" class="flex items-center justify-center space-x-2 w-full sm:w-auto px-8 py-4 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-bold text-lg transition shadow-lg shadow-teal-500/30">
+                    <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+                    <span>Launch Dashboard</span>
+                </a>
+                <a href="docs.html" class="flex items-center justify-center space-x-2 w-full sm:w-auto px-8 py-4 rounded-xl border-2 border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 font-bold text-lg transition">
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                    <span>Read the Docs</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Stats Row -->
+        <section class="py-12 px-6 border-y border-slate-100 bg-slate-50">
+            <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-slate-200">
+                <div class="text-center">
+                    <div class="text-4xl font-extrabold text-slate-900 font-mono mb-2">3</div>
+                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Algorithms Benchmarked</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-extrabold text-teal-500 font-mono mb-2">+0.56%</div>
+                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Avg. Optimality Gap</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-extrabold text-slate-900 font-mono mb-2">O(n²)</div>
+                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Split Decoder Complexity</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-extrabold text-slate-900 font-mono mb-2">8</div>
+                    <div class="text-sm font-semibold text-slate-500 uppercase tracking-wide">Delivered Components</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-20 px-6 max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h3 class="text-3xl font-bold text-slate-900">What's Inside</h3>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center mb-4">
+                        <i data-lucide="atom" class="w-6 h-6 text-cyan-600"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">QPSO Solver Engine</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">GAQPSO, Delta-Well QPSO, and a classical PSO baseline, with Prins optimal split decoding and 2-opt local search.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mb-4">
+                        <i data-lucide="map-pin" class="w-6 h-6 text-teal-600"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">2D Fleet Route Visualizer</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Animated vehicles, radar sweep, demand rings, zoom / pan, and per-vehicle route isolation on an interactive canvas.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                        <i data-lucide="activity" class="w-6 h-6 text-rose-600"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">Convergence Analytics</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Live G_best trajectory, swarm mean fitness, and BKS baseline overlay across optimization iterations.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center mb-4">
+                        <i data-lucide="bar-chart-2" class="w-6 h-6 text-rose-600"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">Benchmarking Suite</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Comparative evaluation across Augerat (1995) instances — distance, gap, runtime, and feasibility.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-teal-100 flex items-center justify-center mb-4">
+                        <i data-lucide="sliders" class="w-6 h-6 text-teal-600"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">Tunable Hyperparameters</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Swarm size, max iterations, vehicle capacity, and contraction-expansion coefficient — all live-adjustable.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-100 flex items-center justify-center mb-4">
+                        <i data-lucide="download" class="w-6 h-6 text-cyan-600"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">Export & Manifests</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">Download full JSON telemetry or a CSV fleet dispatch manifest straight from the dashboard.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-slate-200 bg-slate-50 mt-auto text-center">
+        <p class="text-sm text-slate-500 font-medium">
+            Quantum Fleet Optimizer &middot; QPSO CVRP Engine &middot; Built for Smart India Hackathon
+        </p>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
