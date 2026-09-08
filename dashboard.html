@@ -197,7 +197,7 @@
 
             <!-- Primary Action Button: Execute Optimization -->
             <div class="pt-2 space-y-2">
-                <button id="runOptimizationBtn" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-500 via-teal-600 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-bold text-sm tracking-wide shadow-md shadow-teal-500/25 flex items-center justify-center space-x-2 transition transform active:scale-98">
+                <button id="runOptimizationBtn" onclick="if(window.app && !window.app.isOptimizing) window.app.executeOptimization();" class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-500 via-teal-600 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white font-bold text-sm tracking-wide shadow-md shadow-teal-500/25 flex items-center justify-center space-x-2 transition transform active:scale-98 cursor-pointer">
                     <i data-lucide="play" class="w-4 h-4 fill-current"></i>
                     <span>Execute Optimization</span>
                 </button>
