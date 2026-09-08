@@ -3,7 +3,7 @@ import socketserver
 import os
 import urllib.parse
 
-PORT = 8000
+PORT = int(os.environ.get("PORT", 8000))
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
 class SmartHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
