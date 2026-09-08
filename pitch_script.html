@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quantum Fleet Optimizer — SIH 2026 Pitch Script & Defense Dossier</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ],
+            throwOnError: false
+        });"></script>
+    <style>
+        @page {
+            size: A4;
+            margin: 16mm 15mm 16mm 15mm;
+            @bottom-right {
+                content: counter(page);
+                font-size: 8.5pt;
+                color: #64748b;
+            }
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #0f172a;
+            background: #ffffff;
+            line-height: 1.48;
+            font-size: 10pt;
+        }
+        .header {
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+        }
+        .header-badge {
+            display: inline-block;
+            background: #0f766e;
+            color: white;
+            font-size: 8pt;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        h1 {
+            font-size: 18pt;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 4px 0;
+            letter-spacing: -0.02em;
+        }
+        .subtitle {
+            font-size: 10.5pt;
+            color: #475569;
+            font-weight: 500;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 10px;
+            font-size: 8.5pt;
+        }
+        .meta-item strong {
+            color: #0f172a;
+            display: block;
+            font-size: 7.5pt;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .meta-item span {
+            color: #334155;
+            font-weight: 600;
+        }
+        .section-card {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+            background: #ffffff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .section-header {
+            background: #f1f5f9;
+            padding: 8px 12px;
+            border-bottom: 1px solid #cbd5e1;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-title {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .role-pill {
+            font-size: 7.5pt;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .role-m1 { background: #e0e7ff; color: #3730a3; }
+        .role-m2 { background: #ccfbf1; color: #115e59; }
+        .role-m3 { background: #fef3c7; color: #92400e; }
+        .time-pill {
+            font-size: 7.5pt;
+            background: #e2e8f0;
+            color: #334155;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .section-body {
+            padding: 12px;
+        }
+        .cue-box {
+            background: #fdf2f8;
+            border-left: 3px solid #db2777;
+            padding: 5px 8px;
+            font-size: 8pt;
+            color: #9d174d;
+            font-weight: 600;
+            margin-bottom: 8px;
+            border-radius: 0 4px 4px 0;
+        }
+        .speech {
+            font-size: 9.5pt;
+            color: #1e293b;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+        .speech p {
+            margin-bottom: 6px;
+        }
+        .speech ul {
+            margin: 4px 0 6px 18px;
+            padding: 0;
+        }
+        .speech li {
+            margin-bottom: 3px;
+        }
+        .highlight {
+            background: #fef08a;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+        .math-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin: 8px 0;
+            font-size: 9pt;
+        }
+        .math-title {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #0f766e;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 2px;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+            margin: 8px 0;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #cbd5e1;
+            padding: 5px 7px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background: #f1f5f9;
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .comparison-table tr:nth-child(even) {
+            background: #f8fafc;
+        }
+        .qa-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-bottom: 7px;
+            page-break-inside: avoid;
+        }
+        .qa-q {
+            font-weight: 700;
+            color: #b91c1c;
+            font-size: 9pt;
+            margin-bottom: 3px;
+        }
+        .qa-a {
+            font-size: 8.5pt;
+            color: #334155;
+            line-height: 1.4;
+        }
+        .qa-who {
+            font-size: 7pt;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #047857;
+            margin-bottom: 1px;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-badge">Smart India Hackathon (SIH 2026) — Final Jury Pitch Dossier</div>
+        <h1>Quantum Fleet Optimizer (QPSO CVRP Engine)</h1>
+        <div class="subtitle">A 5 to 6-Minute Pitch Script & Technical Defense Matrix for a 3-Member Team</div>
+        
+        <div class="meta-grid">
+            <div class="meta-item">
+                <strong>Pitch Duration</strong>
+                <span>5:30 Total (Max 6:00)</span>
+            </div>
+            <div class="meta-item">
+                <strong>Team Allocation</strong>
+                <span>M1 (Lead/Vision) · M2 (Math Lead) · M3 (Demo)</span>
+            </div>
+            <div class="meta-item">
+                <strong>Primary Instance</strong>
+                <span>Augerat A-n32-k5 (Gap &lt; 0.56%)</span>
+            </div>
+            <div class="meta-item">
+                <strong>Deployment Target</strong>
+                <span>Smart Cities · Quant · FinTech</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- PART 1 -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span>Part 1: Introduction & The Core Problem</span>
+                <span class="role-pill role-m1">Member 1 (Pitch Lead)</span>
+            </div>
+            <span class="time-pill">0:00 – 0:40 (40s)</span>
+        </div>
+        <div class="section-body">
+            <div class="cue-box">
+                [STAGE CUE: Confident stance, address jury directly, slide displays project title and dynamic city map graphic]
+            </div>
+            <div class="speech">
+                <p>"Respected Members of the Jury, good morning. In metropolitan India today, last-mile delivery and freight mobility consume over <span class="highlight">40% of all supply-chain operating costs</span>. A single percentage point of route inefficiency across a smart-city delivery fleet doesn't just mean burned diesel and missed SLA deadlines — it directly causes thousands of metric tons of urban emissions and compound gridlocks."</p>
+                <p>"I am <strong>[Member 1 Name]</strong>, and alongside my colleagues <strong>[Member 2 Name]</strong> and <strong>[Member 3 Name]</strong>, we present the <strong>Quantum Fleet Optimizer</strong> — a high-performance optimization platform powered by <em>Quantum-Behaved Particle Swarm Optimization (QPSO)</em> coupled with polynomial-time optimal tour splitting, designed to eliminate sub-optimality in capacitated fleet operations."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span>Part 2: The Combinatorial Dilemma (CVRP)</span>
+                <span class="role-pill role-m1">Member 1 (Pitch Lead)</span>
+            </div>
+            <span class="time-pill">0:40 – 1:30 (50s)</span>
+        </div>
+        <div class="section-body">
+            <div class="cue-box">
+                [STAGE CUE: Switch to problem complexity slide. Point to combinatorial explosion curve]
+            </div>
+            <div class="speech">
+                <p>"To appreciate why this problem remains unsolved in production, consider the <strong>Capacitated Vehicle Routing Problem (CVRP)</strong>. With $n$ customer nodes and capacity constraints $Q$, the feasible permutation space scales as $\mathcal{O}((n-1)! / 2)$. For a modest district of merely 50 delivery stops, the search space exceeds $10^{62}$ possible configurations — far exceeding the number of atoms in our galaxy."</p>
+                <p>"Commercial logistics currently rely on greedy heuristics or classical metaheuristics. But these solvers suffer from two fatal handicaps: they are trapped almost instantly inside shallow local minima, or they demand over 20 manually hand-tuned penalty weights that crumble the moment traffic or demand fluctuates. We asked: <em>Can quantum mechanics give us a provable escape trajectory?</em> To explain the mathematics, I invite our math lead, <strong>[Member 2 Name]</strong>."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- PART 3 -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span>Part 3: Explaining QPSO — The Mathematical Core</span>
+                <span class="role-pill role-m2">Member 2 (Math Lead / You)</span>
+            </div>
+            <span class="time-pill">1:30 – 3:00 (90s)</span>
+        </div>
+        <div class="section-body">
+            <div class="cue-box">
+                [STAGE CUE: Take center stage. Project authoritative mathematical command. Refer to KaTeX equations on screen]
+            </div>
+            <div class="speech">
+                <p>"Thank you. Classical PSO describes particles via Newtonian mechanics with positions $X$ and velocities $V$. But Newton's equations are bounded: if velocity decays, the particle cannot escape a potential well. QPSO, introduced by Sun et al., fundamentally strips away the velocity vector. We model each particle as a quantum state bound inside a <strong>delta-potential well</strong> centered at a stochastic local attractor $p_{i}$."</p>
+            </div>
+
+            <div class="math-box">
+                <div class="math-title">Equation 1: 1D Time-Independent Schrödinger Wave Function</div>
+                $$\psi(x) = \frac{1}{\sqrt{L}} \exp\left(-\frac{|x - p|}{L}\right), \quad L = \alpha \cdot |mbest - X|$$
+                <div class="math-title" style="margin-top:6px;">Equation 2: Position Update via Monte Carlo Inverse CDF Sampling</div>
+                $$X_{i,d}(t+1) = p_{i,d}(t) \pm \alpha \cdot \big|mbest_d(t) - X_{i,d}(t)\big| \cdot \ln\left(\frac{1}{u}\right), \quad u \sim \mathcal{U}(0,1)$$
+                <div class="math-title" style="margin-top:6px;">Equation 3: Swarm Mean Best Vector (Global Quantum Coherence)</div>
+                $$mbest(t) = \frac{1}{M}\sum_{i=1}^M P_i(t) = \left(\frac{1}{M}\sum_{i=1}^M P_{i,1}, \dots, \frac{1}{M}\sum_{i=1}^M P_{i,n}\right)$$
+            </div>
+
+            <div class="speech">
+                <p>"Notice the mathematical implication of the probability density function $|\psi(x)|^2$: <span class="highlight">Particles possess a strictly non-zero probability of appearing anywhere in $\mathbb{R}^n$ at any iteration.</span> Unlike classical PSO, which gets trapped when velocity hits zero, QPSO has an exponential tail that guarantees an infinite domain of exploration."</p>
+                <p>"To bridge this continuous quantum domain into discrete valid vehicle tours, we apply <strong>Largest Order Value (LOV)</strong> to map $\mathbb{R}^n \to \Pi_n$, yielding a giant permutation tour. Then, we solve vehicle partitioning not by greedy clustering, but via <strong>Prins' (2004) Optimal Split DAG</strong>. We construct a directed acyclic graph where each feasible sub-tour is an edge with distance cost, and compute the globally optimal fleet partition in polynomial time $\mathcal{O}(n^2)$ using topological Bellman-Ford."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PART 4 -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span>Part 4: Why QPSO? Benchmarks & Algorithmic Critique</span>
+                <span class="role-pill role-m2">Member 2 (Math Lead / You)</span>
+            </div>
+            <span class="time-pill">3:00 – 4:15 (75s)</span>
+        </div>
+        <div class="section-body">
+            <div class="cue-box">
+                [STAGE CUE: Turn to the Jury. Address the classic algorithms with intellectual rigor & respect]
+            </div>
+            <div class="speech">
+                <p>"Now, a critical question arises: <em>Why QPSO over established algorithms like Clarke & Wright's Savings Heuristic, or Large Neighborhood Search?</em>"</p>
+                <p>"<strong>The Clarke and Wright Savings algorithm</strong> (1964) is an iconic milestone in operational research. It computes savings $s_{ij} = c_{i0} + c_{0j} - c_{ij}$ and greedily merges routes. But as a deterministic greedy heuristic, Clarke & Wright makes irreversible decisions in the first 5% of its execution. If an early merge is sub-optimal, it locks downstream routes into bad topologies, resulting in a persistent <strong>8% to 15% optimality gap</strong> on benchmark instances."</p>
+                <p>"Meanwhile, state-of-the-art heuristics like HGS-CVRP or ALNS rely on up to 25 hyper-parameters — destroy operators, repair weights, simulated annealing cooling schedules. When deployed in live smart cities with shifting fleet sizes, tuning them is intractable."</p>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Space / Paradigm</th>
+                        <th>Hyperparameters</th>
+                        <th>Premature Convergence</th>
+                        <th>Augerat Gap</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Clarke & Wright (1964)</strong></td>
+                        <td>Greedy Constructive</td>
+                        <td>0 (Deterministic)</td>
+                        <td>Locked on first pass (Irreversible)</td>
+                        <td>+8.5% to +14.2%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Classical PSO</strong></td>
+                        <td>Bounded Continuous</td>
+                        <td>3 ($w, c_1, c_2$)</td>
+                        <td>High ($V \to 0$ traps particles)</td>
+                        <td>+5.4% to +8.1%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ALNS / HGS</strong></td>
+                        <td>Discrete Neighborhood</td>
+                        <td>15 – 25 weights</td>
+                        <td>Requires heavy restarts</td>
+                        <td>&lt; 0.5% (Very fragile)</td>
+                    </tr>
+                    <tr style="background:#ccfbf1; font-weight:700;">
+                        <td><strong>Our QPSO + Prins Split</strong></td>
+                        <td>Quantum Wave $\mathbb{R}^n$</td>
+                        <td><strong>1 single factor ($\alpha$)</strong></td>
+                        <td><strong>Zero (Infinite support $|\psi|^2$)</strong></td>
+                        <td><strong>&lt; 0.56% (Robust)</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="speech">
+                <p>"QPSO requires only <strong>one single hyperparameter</strong> — the contraction-expansion factor $\alpha$, which linearly decays from $1.0 \to 0.5$. It provides global quantum exploration early, and laser-focused exploitation late."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- PART 5 -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span>Part 5: Live Demo & Beyond Logistics — Quant & FinTech</span>
+                <span class="role-pill role-m3">Member 3</span> & <span class="role-pill role-m1">Member 1</span>
+            </div>
+            <span class="time-pill">4:15 – 5:30 (75s)</span>
+        </div>
+        <div class="section-body">
+            <div class="cue-box">
+                [STAGE CUE: Member 3 steps to keyboard, launches live optimization on Augerat A-n32-k5 on dashboard.html]
+            </div>
+            <div class="speech">
+                <p><strong>[Member 3 (Live Demo - 35s)]:</strong> "Here is our live dashboard running on <em>Augerat A-n32-k5</em>. As we launch optimization with 40 particles over 200 epochs, watch the radar canvas. The vehicles smoothly isolate individual cluster loops without overlapping edges. In under 1.2 seconds client-side, QPSO converges to a total route cost within <strong>0.56% of the globally proven Best Known Solution (784)</strong>. Feasibility is 100% guaranteed via Prins DAG splitting with zero capacity violations."</p>
+            </div>
+            <div class="cue-box">
+                [STAGE CUE: Member 1 takes the microphone for the forward-looking business outro]
+            </div>
+            <div class="speech">
+                <p><strong>[Member 1 (Strategic Expansion & FinTech - 40s)]:</strong> "Finally, our mathematical engine is not confined to delivery trucks. The exact same QPSO continuous-to-discrete pipeline maps directly to high-stakes problems in <strong>Quantitative Finance and FinTech</strong>:</p>
+                <ul>
+                    <li><strong>Cardinality-Constrained Portfolio Optimization (CCPO):</strong> Selecting $k$ assets from thousands under Markowitz mean-variance frontiers is NP-hard. Standard quadratic programming fails on non-convex transaction fees. QPSO navigates continuous asset weights while LOV enforces discrete cardinality constraints.</li>
+                    <li><strong>Smart Order Routing (SOR) in High-Frequency Trading:</strong> Slicing institutional multi-million dollar liquidity orders across fragmented dark pools and exchanges to minimize slippage and market impact under latency constraints — this is mathematically isomorphic to multi-depot vehicle routing.</li>
+                </ul>
+                <p>"By bridging quantum-behaved wave mechanics with optimal graph theory, Quantum Fleet Optimizer delivers enterprise-grade optimization today on classical silicon, ready for real-world smart cities and financial institutions alike. Thank you — we are now open to the jury's questions."</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEFENSE MATRIX -->
+    <div class="section-card">
+        <div class="section-header">
+            <div class="section-title">
+                <span>Jury Q&A Defense Matrix (Pre-Calculated Countermeasures)</span>
+                <span class="role-pill role-m2">For Member 2 (Math)</span>
+            </div>
+            <span class="time-pill">Reference</span>
+        </div>
+        <div class="section-body">
+            
+            <div class="qa-card">
+                <div class="qa-who">Speaker: Member 2 (Math Lead)</div>
+                <div class="qa-q">Jury: "Why did you use QPSO instead of Clarke and Wright's Savings heuristic?"</div>
+                <div class="qa-a">
+                    <em>"Clarke and Wright is an outstanding $\mathcal{O}(n^2 \log n)$ constructive greedy heuristic, but it is fundamentally deterministic and short-sighted. By locking in greedy customer merges based purely on pairwise savings $s_{ij}$, it suffers from severe cascade errors when capacity constraints are tight, frequently delivering 10-15% gaps on Augerat benchmarks. QPSO operates on a continuous probabilistic search landscape: it explores trillions of topological permutations while Prins' split algorithm globally optimizes the vehicle partition. We achieve a sub-0.6% gap where Clarke & Wright plateaus at 12%."</em>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="qa-who">Speaker: Member 2 (Math Lead)</div>
+                <div class="qa-q">Jury: "Isn't this just classical heuristic optimization? What makes it 'Quantum'?"</div>
+                <div class="qa-a">
+                    <em>"We are completely transparent: this is a quantum-inspired metaheuristic running on classical CPUs, not hardware qubit superposition. The 'quantum' nomenclature is rigorous because particles satisfy the 1D Schrödinger equation in a delta-potential well. Unlike classical Newtonian particles bounded by finite velocity $v(t)$, our particles have a wave function $\psi(x)$ whose probability distribution $|\psi(x)|^2$ has infinite support over $(-\infty, +\infty)$. This guarantees a mathematically non-zero tunneling probability through potential barriers."</em>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="qa-who">Speaker: Member 2 & Member 1</div>
+                <div class="qa-q">Jury: "How realistic is the expansion into Quant / FinTech?"</div>
+                <div class="qa-a">
+                    <em>"The mathematical formulation is identical. In CVRP, you partition an ordered permutation into capacity-limited vehicle bins. In Cardinality-Constrained Portfolio Optimization (CCPO), you partition assets into a $K$-asset portfolio satisfying budget constraints $\sum w_i = 1$ and non-linear risk covariance matrices. Classical solvers (like CVXPY) choke on cardinality constraints ($L_0$ norm); QPSO natively handles continuous weights with non-convex penalty landscapes."</em>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

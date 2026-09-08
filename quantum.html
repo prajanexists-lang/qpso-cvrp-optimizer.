@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Dynamics Lab | Quantum Fleet Optimizer</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- KaTeX CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function safeRenderMath() {
+                if (window.renderMathInElement && document.body) {
+                    try {
+                        renderMathInElement(document.body, {
+                            delimiters: [
+                                {left: '$$', right: '$$', display: true},
+                                {left: '$', right: '$', display: false}
+                            ],
+                            throwOnError: false
+                        });
+                    } catch(e) {
+                        console.warn('Math rendering deferred:', e);
+                    }
+                } else {
+                    setTimeout(safeRenderMath, 150);
+                }
+            }
+            safeRenderMath();
+        });
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .beacon-pulse { animation: pulseGlow 2s infinite ease-in-out; }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.3); }
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e2e8f0;
+            border-radius: 9999px;
+            height: 6px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #0891b2;
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 4px rgba(8, 145, 178, 0.4);
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+            background: #0e7490;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col font-sans selection:bg-cyan-500/20 selection:text-cyan-900">
+
+    <!-- TOP HEADER & NAVIGATION BAR (Clean Light Theme) -->
+    <header class="h-16 border-b border-slate-200/80 bg-white/95 backdrop-blur-md px-4 lg:px-8 flex items-center justify-between sticky top-0 z-40 shadow-xs">
+        <!-- Left: Logo & Title -->
+        <a href="index.html" class="flex items-center space-x-3 group">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-indigo-500 to-purple-600 p-0.5 shadow-sm group-hover:shadow-cyan-500/20 transition">
+                <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                    <i data-lucide="atom" class="w-5 h-5 text-cyan-600 group-hover:rotate-45 transition-transform duration-500"></i>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center space-x-2">
+                    <h1 class="font-bold text-base md:text-lg tracking-tight text-slate-900 flex items-center gap-1.5">
+                        Quantum Fleet Optimizer
+                    </h1>
+                    <span class="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+                        v2.4 QPU-Sim
+                    </span>
+                    <span class="hidden sm:inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 beacon-pulse"></span>
+                        <span>Schrödinger Delta-Well Engine Active</span>
+                    </span>
+                </div>
+                <p class="text-[11px] text-slate-500 hidden lg:block font-mono">Continuous Hilbert Coordinate Permutation Decoder &delta;-Well Potential Dynamics</p>
+            </div>
+        </a>
+
+        <!-- Center: Standard Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+            <a href="index.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Home</a>
+            <a href="dashboard.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Dashboard</a>
+            <a href="quantum.html" class="px-3.5 py-1.5 rounded-full bg-cyan-50 text-cyan-700 font-semibold border border-cyan-100 shadow-xs">Quantum Lab</a>
+            <a href="docs.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">Docs</a>
+            <a href="about.html" class="px-3.5 py-1.5 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition">About</a>
+        </nav>
+
+        <!-- Right: Actions & Sound -->
+        <div class="flex items-center space-x-2.5">
+            <!-- Theme Toggle Button (Light / Dark Mode) -->
+            <button id="themeToggleBtn" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:text-slate-900 hover:border-slate-300 transition shadow-xs" title="Switch Theme (Light / Dark Mode)">
+                <i data-lucide="sun" class="w-4 h-4 text-amber-500" id="themeIcon"></i>
+                <span id="themeLabel">Light</span>
+            </button>
+            <button id="soundToggleBtn" class="p-2 rounded-lg bg-white border border-slate-200 text-slate-500 hover:text-cyan-700 hover:border-slate-300 transition shadow-xs" title="Toggle Synthesized Audio FX">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+            </button>
+            <a href="dashboard.html" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-semibold text-xs transition shadow-xs">
+                <span>Launch Dashboard</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- SUB-BANNER / HERO CONTEXT RIBBON -->
+    <div class="border-b border-slate-200/80 bg-white/80 backdrop-blur-sm px-4 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-1.5 text-cyan-700 font-mono font-semibold">
+                <i data-lucide="sparkles" class="w-4 h-4 text-cyan-600"></i>
+                <span>Quantum Dynamics Lab</span>
+            </div>
+            <span class="text-slate-300">|</span>
+            <span class="text-slate-600">Hilbert State Trajectory Simulation &middot; Delta-Well Wave Mechanics &middot; Stochastic Quantum Tunneling</span>
+        </div>
+
+        <div class="flex items-center space-x-2">
+            <button id="btnTriggerJump" class="px-3 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 font-mono text-[11px] font-semibold flex items-center space-x-1.5 transition shadow-xs">
+                <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
+                <span>Trigger Quantum Jump</span>
+            </button>
+            <button id="btnCollapseWave" class="px-3 py-1 rounded-lg bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-mono text-[11px] font-semibold flex items-center space-x-1.5 transition shadow-xs">
+                <i data-lucide="shrink" class="w-3.5 h-3.5 text-purple-600"></i>
+                <span>Induce Wave Collapse</span>
+            </button>
+            <button id="btnResetState" class="px-3 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 font-mono text-[11px] transition">
+                <span>Reset</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN INTERACTIVE EXPERIMENTAL LAYOUT -->
+    <main class="flex-1 max-w-[1750px] w-full mx-auto p-4 lg:p-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+        <!-- =========================================================================
+             LEFT COLUMN: DUAL QUANTUM VISUALIZERS (7 COLUMNS)
+             ========================================================================= -->
+        <div class="xl:col-span-7 flex flex-col space-y-6">
+
+            <!-- 1. TOP SUB-CANVAS: 2D Spatial Quantum Wave Field & Tunneling Map -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex flex-col space-y-3 relative overflow-hidden">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <div class="p-1.5 rounded-lg bg-cyan-50 text-cyan-600 border border-cyan-200">
+                            <i data-lucide="radar" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-sm text-slate-900">2D Spatial Quantum Wave Field &amp; Tunneling Map</h2>
+                            <p class="text-[11px] text-slate-500">Depot Ground State $(82, 76)$, Radial Wave Density $|\psi(x, y)|^2$, &amp; Energy Barriers</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 text-[11px] font-mono">
+                        <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700">
+                            Swarm: <strong class="text-cyan-700">M = 40 Particles</strong>
+                        </span>
+                        <span id="canvas2dStatus" class="px-2 py-0.5 rounded bg-cyan-50 border border-cyan-200 text-cyan-700 font-semibold">
+                            Superposition Active
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Canvas Stage -->
+                <div id="spatialFieldStage" class="relative bg-slate-50 rounded-xl border border-slate-200 overflow-hidden h-[360px] flex items-center justify-center shadow-inner">
+                    <canvas id="spatialFieldCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+
+                    <!-- Top Left HUD: Potential Well Center -->
+                    <div id="spatialHudTopLeft" class="absolute top-3 left-3 pointer-events-none flex flex-col space-y-1 bg-white/95 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-200 text-[11px] font-mono shadow-xs">
+                        <div class="flex items-center space-x-2 text-teal-800 font-bold">
+                            <span class="w-2 h-2 rounded-full bg-teal-600 animate-ping"></span>
+                            <span>Global Ground State Well</span>
+                        </div>
+                        <div class="text-slate-600 text-[10px]">Depot: $v_0 = (82, 76)$ &middot; $V_0 = -\gamma \delta(r)$</div>
+                    </div>
+
+                    <!-- Top Right HUD: Legend -->
+                    <div id="spatialHudTopRight" class="absolute top-3 right-3 pointer-events-none hidden sm:flex items-center space-x-3 bg-white/95 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-200 text-[10px] font-mono text-slate-700 shadow-xs">
+                        <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-600 border border-white"></span><span>Wavepackets $X_i$</span></span>
+                        <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 border border-white"></span><span>Global Best $G$</span></span>
+                        <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 border border-white"></span><span>Attractor $p$</span></span>
+                        <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded border border-rose-400 bg-rose-100"></span><span class="text-rose-700">Barrier Zone</span></span>
+                    </div>
+
+                    <!-- Bottom HUD: Real-time Tunneling notification banner -->
+                    <div id="tunnelEventBanner" class="absolute bottom-3 left-3 right-3 pointer-events-none flex items-center justify-between bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-amber-300 text-[11px] font-mono opacity-0 transition-opacity duration-300 shadow-sm">
+                        <span class="text-amber-800 font-semibold flex items-center space-x-1.5">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
+                            <span id="bannerText">Quantum Tunneling Jump: Energy barrier penetrated at (x=45.2, y=81.0)</span>
+                        </span>
+                        <span class="text-teal-800 font-semibold text-[10px]">Transmission: $P_{\text{tunnel}} = 24.8\%$</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-[11px] text-slate-500 px-1 font-mono">
+                    <span>Click anywhere inside the 2D field to reposition the Stochastic Attractor $p_{\text{local}}$.</span>
+                    <span class="text-cyan-700 font-semibold">60 FPS Hardware Rendered</span>
+                </div>
+            </div>
+
+            <!-- 2. BOTTOM SUB-CANVAS: 1D Schrödinger Potential Well & Wave Packet Profile -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex flex-col space-y-3 relative overflow-hidden">
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <div class="p-1.5 rounded-lg bg-purple-50 text-purple-600 border border-purple-200">
+                            <i data-lucide="activity" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-sm text-slate-900">1D Schrödinger Potential Well &amp; Wave Packet Profile</h2>
+                            <p class="text-[11px] text-slate-500">Double-Exponential Probability Density $|\psi(x)|^2 = \frac{1}{L} e^{-2|x-p|/L}$ &amp; Delta-Spike $V(x) = -\gamma \delta(x-p)$</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 text-[11px] font-mono">
+                        <span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700">
+                            Well Center: <strong id="valWellCenter" class="text-purple-700">x = 0.00</strong>
+                        </span>
+                        <button id="btnToggle1DPhase" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition font-medium">
+                            Wave Phase &sim;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1D Canvas Stage (Clean Studio Surface) -->
+                <div id="potentialWellStage" class="relative bg-slate-50 rounded-xl border border-slate-200 overflow-hidden h-[290px] flex items-center justify-center shadow-inner">
+                    <canvas id="potentialWellCanvas" class="w-full h-full block cursor-crosshair"></canvas>
+
+                    <!-- Top Labels -->
+                    <div id="potentialHudTopLeft" class="absolute top-2.5 left-3 pointer-events-none flex items-center space-x-2 text-[10px] font-mono text-cyan-800 bg-white/95 px-2.5 py-1 rounded border border-slate-200 font-semibold shadow-xs">
+                        <span>$|\psi(x)|^2$ Wave Envelope</span>
+                    </div>
+
+                    <div id="potentialHudTopRight" class="absolute top-2.5 right-3 pointer-events-none flex items-center space-x-2 text-[10px] font-mono text-rose-700 bg-white/95 px-2.5 py-1 rounded border border-rose-200 font-semibold shadow-xs">
+                        <span>Classical Forbidden Region ($E < V$)</span>
+                    </div>
+
+                    <!-- Bottom Status -->
+                    <div id="potentialHudBottom" class="absolute bottom-2 left-3 right-3 pointer-events-none flex items-center justify-between text-[10px] font-mono text-slate-600 bg-white/95 px-2.5 py-1 rounded border border-slate-200 shadow-xs">
+                        <span>Inverse Transform Sampling: $x = p \pm \alpha |m_{\text{best}} - x| \ln(1/u)$</span>
+                        <span class="text-amber-800 font-semibold">Tunneling Probability Active</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between text-[11px] text-slate-500 px-1 font-mono">
+                    <span>Laplace distribution has infinite tails, allowing instantaneous jumps past arbitrary energy barriers without velocity inertia.</span>
+                    <span class="text-purple-700 font-semibold">Analytical Wave Solution</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- =========================================================================
+             RIGHT COLUMN: PHYSICS TELEMETRY & REAL-TIME CONTROLS (5 COLUMNS)
+             ========================================================================= -->
+        <div class="xl:col-span-5 flex flex-col space-y-6">
+
+            <!-- 1. LIVE STATE TELEMETRY & CONTROLS PANEL -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl p-5 flex flex-col space-y-5 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="sliders" class="w-4 h-4 text-cyan-600"></i>
+                        <h2 class="font-bold text-sm text-slate-900">Quantum State Telemetry &amp; Physics Controls</h2>
+                    </div>
+                    <span id="quantumStateBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        Ground State Eigenvalue
+                    </span>
+                </div>
+
+                <!-- 4 KPI Telemetry Cards -->
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- KPI 1: Tunneling Jump Events -->
+                    <div id="tunnelingKpiCard" class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 transition-all duration-300">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+                            <span class="font-medium">Tunneling Jump Events</span>
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
+                        </div>
+                        <div class="flex items-baseline space-x-1.5">
+                            <span id="kpiTunnelCount" class="text-2xl font-bold font-mono text-amber-600">24</span>
+                            <span class="text-[10px] text-slate-500 font-mono">barriers</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-1 font-mono">Local minima traps bypassed</div>
+                    </div>
+
+                    <!-- KPI 2: Barrier Transmission Coefficient -->
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+                            <span class="font-medium">Barrier Transmission</span>
+                            <i data-lucide="activity" class="w-3.5 h-3.5 text-cyan-600"></i>
+                        </div>
+                        <div class="flex items-baseline space-x-1.5">
+                            <span id="kpiTransmissionProb" class="text-2xl font-bold font-mono text-cyan-700">24.8%</span>
+                            <span class="text-[10px] text-slate-500 font-mono">P_tunnel</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-1 font-mono">Transmission $e^{-2\alpha \Delta E}$</div>
+                    </div>
+
+                    <!-- KPI 3: Wavepacket Spatial Spread (RMSD) -->
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+                            <span class="font-medium">Spatial Dispersion</span>
+                            <i data-lucide="compass" class="w-3.5 h-3.5 text-emerald-600"></i>
+                        </div>
+                        <div class="flex items-baseline space-x-1.5">
+                            <span id="kpiDispersion" class="text-2xl font-bold font-mono text-emerald-700">&plusmn;2.15</span>
+                            <span class="text-[10px] text-slate-500 font-mono">&sigma;_q</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-1 font-mono">Hilbert uncertainty width</div>
+                    </div>
+
+                    <!-- KPI 4: Ground State Optimal Cost -->
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                        <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1">
+                            <span class="font-medium">Ground State Cost</span>
+                            <i data-lucide="target" class="w-3.5 h-3.5 text-purple-600"></i>
+                        </div>
+                        <div class="flex items-baseline space-x-1.5">
+                            <span id="kpiGroundCost" class="text-2xl font-bold font-mono text-purple-700">788.42</span>
+                            <span class="text-[10px] text-slate-500 font-mono">km</span>
+                        </div>
+                        <div class="text-[10px] text-emerald-700 font-semibold mt-1 font-mono">+0.56% gap vs BKS (784)</div>
+                    </div>
+                </div>
+
+                <!-- Interactive Physics Sliders -->
+                <div class="space-y-4 pt-2 border-t border-slate-200">
+                    
+                    <!-- Slider 1: Contraction-Expansion Factor (alpha) -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-700 font-semibold flex items-center gap-1">
+                                Contraction Factor $\alpha(t)$:
+                                <span class="text-[10px] text-slate-500 font-normal">(Exploration &rarr; Exploitation)</span>
+                            </span>
+                            <span id="labelAlpha" class="font-mono font-bold text-cyan-700">0.850</span>
+                        </div>
+                        <input id="sliderAlpha" type="range" min="0.40" max="1.20" step="0.01" value="0.85" class="w-full">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>0.40 (Ground State)</span>
+                            <span>0.85 (Default)</span>
+                            <span>1.20 (High Tunneling)</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 2: Potential Well Depth (gamma) -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-700 font-semibold flex items-center gap-1">
+                                Delta-Well Depth $\gamma$:
+                                <span class="text-[10px] text-slate-500 font-normal">(Attractor Gravity)</span>
+                            </span>
+                            <span id="labelGamma" class="font-mono font-bold text-purple-700">2.50</span>
+                        </div>
+                        <input id="sliderGamma" type="range" min="1.00" max="5.00" step="0.10" value="2.50" class="w-full">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>1.0 (Diffuse)</span>
+                            <span>2.5 (Harmonic)</span>
+                            <span>5.0 (Singular Delta)</span>
+                        </div>
+                    </div>
+
+                    <!-- Slider 3: Swarm Thermal Jitter -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-700 font-semibold flex items-center gap-1">
+                                Stochastic Noise $\eta$:
+                                <span class="text-[10px] text-slate-500 font-normal">(Thermal Excitation)</span>
+                            </span>
+                            <span id="labelNoise" class="font-mono font-bold text-emerald-700">0.30</span>
+                        </div>
+                        <input id="sliderNoise" type="range" min="0.05" max="1.00" step="0.05" value="0.30" class="w-full">
+                    </div>
+                </div>
+
+                <!-- Simulation Control Buttons Bar -->
+                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200">
+                    <button id="btnPlayPause" class="w-full py-2.5 rounded-xl bg-cyan-50 hover:bg-cyan-100 border border-cyan-200 text-cyan-800 text-xs font-semibold font-mono flex items-center justify-center space-x-1.5 transition shadow-xs">
+                        <i data-lucide="pause" class="w-3.5 h-3.5"></i>
+                        <span id="playPauseText">Pause Simulation</span>
+                    </button>
+                    <button id="btnInjectJump" class="w-full py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-800 text-xs font-semibold font-mono flex items-center justify-center space-x-1.5 transition shadow-xs">
+                        <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-600"></i>
+                        <span>Force Quantum Leap</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. TERMINAL CONSOLE (QUANTUM EVENT STREAM) -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl p-4 flex flex-col space-y-2 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <div class="flex items-center space-x-2 text-cyan-700">
+                        <i data-lucide="terminal" class="w-4 h-4"></i>
+                        <h3 class="font-bold text-xs text-slate-900 font-mono uppercase tracking-wider">Quantum Event Stream</h3>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span class="text-[10px] font-mono text-slate-500">Live Telemetry</span>
+                        <button id="btnClearLog" class="text-[10px] font-mono text-slate-400 hover:text-slate-700 transition ml-2">Clear</button>
+                    </div>
+                </div>
+
+                <div id="quantumConsole" class="bg-slate-50 rounded-xl p-3 h-[175px] overflow-y-auto space-y-1 font-mono text-[11px] leading-relaxed border border-slate-200 shadow-inner">
+                    <div class="text-emerald-700 font-medium">[t=000] Initialized 40 wave packets in Hilbert space H^31 (Delta-Well QPSO)</div>
+                    <div class="text-cyan-800 font-medium">[t=012] Ground state well centered at central depot coordinates (82, 76)</div>
+                    <div class="text-purple-700 font-medium">[t=028] Mean best position attractor m_best calculated across M=40 particles</div>
+                    <div class="text-amber-800 font-medium">[t=042] Particle #17 triggered quantum tunneling: barrier dE = 14.8 bypassed</div>
+                    <div class="text-cyan-800 font-medium">[t=075] Contraction factor cooled to alpha = 0.680; probability envelope contracting</div>
+                    <div class="text-amber-800 font-medium">[t=098] Particle #31 tunneled through capacity forbidden boundary (100.0 max)</div>
+                    <div class="text-emerald-700 font-bold">[t=118] Wavefunction collapsed to ground state eigenvalue (Cost: 788.42 km)</div>
+                </div>
+            </div>
+
+            <!-- 3. MATHEMATICAL CALLOUT CARD (KaTeX) -->
+            <div class="bg-white border border-slate-200/90 rounded-2xl p-4 flex flex-col space-y-3 shadow-sm border-l-4 border-l-cyan-600">
+                <div class="flex items-center space-x-2 text-cyan-700">
+                    <i data-lucide="sigma" class="w-4 h-4"></i>
+                    <h3 class="font-bold text-xs text-slate-900 font-mono uppercase tracking-wider">Inverse Transform Wave Equation</h3>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    In the Delta-potential well, solving the time-independent Schr&ouml;dinger equation yields a Laplace probability density function. Particle states are sampled without Newtonian velocity via inverse transform:
+                </p>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-center font-mono text-xs overflow-x-auto text-slate-900 shadow-xs">
+                    $$X_{i,d}(t+1) = p_{i,d}(t) \pm \alpha(t) \cdot |m_{\text{best}, d}(t) - X_{i,d}(t)| \cdot \ln\left(\frac{1}{u}\right)$$
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-[10px] font-mono text-slate-500 pt-1">
+                    <div>&bull; $p_{i,d}$: Local Stochastic Attractor</div>
+                    <div>&bull; $m_{\text{best}}$: Swarm Center of Mass</div>
+                    <div>&bull; $\alpha(t)$: Contraction Parameter</div>
+                    <div>&bull; $u \sim \mathcal{U}(0, 1)$: Quantum Wave Collapse</div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER (Clean Light Theme) -->
+    <footer class="border-t border-slate-200 bg-white text-slate-500 text-xs py-5 px-6 mt-6">
+        <div class="max-w-[1700px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center space-x-2">
+                <i data-lucide="atom" class="w-4 h-4 text-cyan-600"></i>
+                <span class="text-slate-800 font-semibold">Quantum Dynamics Lab</span>
+                <span>&middot; Built for Smart India Hackathon 2026</span>
+            </div>
+            <div class="flex items-center space-x-4 text-slate-500">
+                <a href="dashboard.html" class="hover:text-cyan-700 transition">Fleet Dashboard</a>
+                <a href="docs.html" class="hover:text-cyan-700 transition">Formulation Docs</a>
+                <a href="about.html" class="hover:text-cyan-700 transition">About Architecture</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT: QUANTUM DYNAMICS ENGINE & ANIMATION LOOP -->
+    <script>
+    (function() {
+        'use strict';
+
+        // Web Audio Synthesizer for Quantum HUD Sound FX
+        class QuantumSoundFX {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+            _init() {
+                if (!this.ctx && typeof window !== 'undefined') {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+            }
+            toggle() {
+                this.muted = !this.muted;
+                return this.muted;
+            }
+            playJump() {
+                if (this.muted) return;
+                try {
+                    this._init();
+                    if (!this.ctx) return;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.12);
+                    gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.15);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.15);
+                } catch(e) {}
+            }
+            playCollapse() {
+                if (this.muted) return;
+                try {
+                    this._init();
+                    if (!this.ctx) return;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(660, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(220, this.ctx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.25);
+                } catch(e) {}
+            }
+        }
+
+        const sound = new QuantumSoundFX();
+
+        // ---------------------------------------------------------------------
+        // Simulation State Parameters
+        // ---------------------------------------------------------------------
+        const state = {
+            running: true,
+            alpha: 0.85,
+            gamma: 2.50,
+            noise: 0.30,
+            tunnelingCount: 24,
+            phaseTime: 0,
+            animating1DPhase: true,
+            depot: { x: 82, y: 76 },
+            attractor: { x: 82, y: 76 },
+            mbest: { x: 80, y: 74 },
+            gbest: { x: 82, y: 76 },
+            numParticles: 40,
+            particles: [],
+            // Tunneling leaps active on 2D map
+            tunnelEvents: [],
+            // Obstacle energy barriers in 2D space
+            barriers: [
+                { x: 55, y: 65, radius: 24, label: 'Energy Barrier I' },
+                { x: 105, y: 90, radius: 28, label: 'Energy Barrier II' },
+                { x: 70, y: 110, radius: 22, label: 'Capacity Wall' }
+            ]
+        };
+
+        // Initialize 40 particles scattered around depot in CVRP coordinate space
+        for (let i = 0; i < state.numParticles; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 15 + Math.random() * 45;
+            state.particles.push({
+                id: i + 1,
+                x: state.depot.x + Math.cos(angle) * dist,
+                y: state.depot.y + Math.sin(angle) * dist,
+                targetX: state.depot.x + Math.cos(angle) * dist,
+                targetY: state.depot.y + Math.sin(angle) * dist,
+                val1D: (Math.random() - 0.5) * 5.0,
+                targetVal1D: (Math.random() - 0.5) * 5.0,
+                color: '#22d3ee',
+                radius: 3 + Math.random() * 1.5,
+                phaseOffset: Math.random() * Math.PI * 2
+            });
+        }
+
+        // ---------------------------------------------------------------------
+        // THEME MANAGEMENT (Dark / Light Mode Toggle)
+        // ---------------------------------------------------------------------
+        let isDarkMode = false;
+        try {
+            isDarkMode = localStorage.getItem('qpso_theme') === 'dark';
+        } catch(e) {}
+
+        function applyTheme(darkMode) {
+            isDarkMode = darkMode;
+            try {
+                localStorage.setItem('qpso_theme', isDarkMode ? 'dark' : 'light');
+            } catch(e) {}
+
+            const themeIcon = document.getElementById('themeIcon');
+            const themeLabel = document.getElementById('themeLabel');
+            if (themeIcon && themeLabel) {
+                if (isDarkMode) {
+                    themeIcon.setAttribute('data-lucide', 'moon');
+                    themeIcon.className = 'w-4 h-4 text-indigo-400';
+                    themeLabel.textContent = 'Dark';
+                } else {
+                    themeIcon.setAttribute('data-lucide', 'sun');
+                    themeIcon.className = 'w-4 h-4 text-amber-500';
+                    themeLabel.textContent = 'Light';
+                }
+                if (window.lucide) lucide.createIcons();
+            }
+
+            // 2D Spatial Field Stage & HUDs
+            const sStage = document.getElementById('spatialFieldStage');
+            const sTopL = document.getElementById('spatialHudTopLeft');
+            const sTopR = document.getElementById('spatialHudTopRight');
+            const tBanner = document.getElementById('tunnelEventBanner');
+            if (sStage) {
+                sStage.className = isDarkMode
+                    ? "relative bg-slate-950 rounded-xl border border-slate-800 overflow-hidden h-[360px] flex items-center justify-center shadow-inner"
+                    : "relative bg-slate-50 rounded-xl border border-slate-200 overflow-hidden h-[360px] flex items-center justify-center shadow-inner";
+            }
+            if (sTopL) {
+                sTopL.className = isDarkMode
+                    ? "absolute top-3 left-3 pointer-events-none flex flex-col space-y-1 bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-700 text-[11px] font-mono shadow-sm"
+                    : "absolute top-3 left-3 pointer-events-none flex flex-col space-y-1 bg-white/95 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-200 text-[11px] font-mono shadow-xs";
+            }
+            if (sTopR) {
+                sTopR.className = isDarkMode
+                    ? "absolute top-3 right-3 pointer-events-none hidden sm:flex items-center space-x-3 bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-700 text-[10px] font-mono text-slate-300 shadow-sm"
+                    : "absolute top-3 right-3 pointer-events-none hidden sm:flex items-center space-x-3 bg-white/95 backdrop-blur-md px-3 py-2 rounded-lg border border-slate-200 text-[10px] font-mono text-slate-700 shadow-xs";
+            }
+            if (tBanner) {
+                tBanner.className = isDarkMode
+                    ? "absolute bottom-3 left-3 right-3 pointer-events-none flex items-center justify-between bg-slate-900/95 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-amber-500/40 text-[11px] font-mono opacity-0 transition-opacity duration-300 shadow-sm"
+                    : "absolute bottom-3 left-3 right-3 pointer-events-none flex items-center justify-between bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-amber-300 text-[11px] font-mono opacity-0 transition-opacity duration-300 shadow-sm";
+            }
+
+            // 1D Potential Well Stage & HUDs
+            const pStage = document.getElementById('potentialWellStage');
+            const pTopL = document.getElementById('potentialHudTopLeft');
+            const pTopR = document.getElementById('potentialHudTopRight');
+            const pBot = document.getElementById('potentialHudBottom');
+            if (pStage) {
+                pStage.className = isDarkMode
+                    ? "relative bg-slate-950 rounded-xl border border-slate-800 overflow-hidden h-[290px] flex items-center justify-center shadow-inner"
+                    : "relative bg-slate-50 rounded-xl border border-slate-200 overflow-hidden h-[290px] flex items-center justify-center shadow-inner";
+            }
+            if (pTopL) {
+                pTopL.className = isDarkMode
+                    ? "absolute top-2.5 left-3 pointer-events-none flex items-center space-x-2 text-[10px] font-mono text-cyan-400 bg-slate-900/90 px-2.5 py-1 rounded border border-cyan-500/30 font-semibold shadow-xs"
+                    : "absolute top-2.5 left-3 pointer-events-none flex items-center space-x-2 text-[10px] font-mono text-cyan-800 bg-white/95 px-2.5 py-1 rounded border border-slate-200 font-semibold shadow-xs";
+            }
+            if (pTopR) {
+                pTopR.className = isDarkMode
+                    ? "absolute top-2.5 right-3 pointer-events-none flex items-center space-x-2 text-[10px] font-mono text-rose-400 bg-slate-900/90 px-2.5 py-1 rounded border border-rose-500/30 font-semibold shadow-xs"
+                    : "absolute top-2.5 right-3 pointer-events-none flex items-center space-x-2 text-[10px] font-mono text-rose-700 bg-white/95 px-2.5 py-1 rounded border border-rose-200 font-semibold shadow-xs";
+            }
+            if (pBot) {
+                pBot.className = isDarkMode
+                    ? "absolute bottom-2 left-3 right-3 pointer-events-none flex items-center justify-between text-[10px] font-mono text-slate-400 bg-slate-900/90 px-2.5 py-1 rounded border border-slate-800 shadow-xs"
+                    : "absolute bottom-2 left-3 right-3 pointer-events-none flex items-center justify-between text-[10px] font-mono text-slate-600 bg-white/95 px-2.5 py-1 rounded border border-slate-200 shadow-xs";
+            }
+
+            render2DField();
+            render1DWell();
+        }
+
+        document.getElementById('themeToggleBtn')?.addEventListener('click', () => {
+            applyTheme(!isDarkMode);
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 't' || e.key === 'T') {
+                if (!['input', 'textarea'].includes(document.activeElement?.tagName?.toLowerCase())) {
+                    applyTheme(!isDarkMode);
+                }
+            }
+        });
+
+        // ---------------------------------------------------------------------
+        // Canvas Setup (High-DPI Scaling)
+        // ---------------------------------------------------------------------
+        const canvas2D = document.getElementById('spatialFieldCanvas');
+        const ctx2D = canvas2D ? canvas2D.getContext('2d') : null;
+        const canvas1D = document.getElementById('potentialWellCanvas');
+        const ctx1D = canvas1D ? canvas1D.getContext('2d') : null;
+
+        function resetCanvasCtx(ctx) {
+            if (!ctx) return;
+            if (typeof ctx.resetTransform === 'function') {
+                ctx.resetTransform();
+            } else if (typeof ctx.setTransform === 'function') {
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+            }
+        }
+
+        function resizeCanvases() {
+            if (!canvas2D || !canvas1D || !ctx2D || !ctx1D) return;
+            const dpr = window.devicePixelRatio || 1;
+            
+            // 2D Canvas
+            const rect2D = canvas2D.getBoundingClientRect();
+            if (rect2D.width > 0 && rect2D.height > 0) {
+                canvas2D.width = Math.round(rect2D.width * dpr);
+                canvas2D.height = Math.round(rect2D.height * dpr);
+                resetCanvasCtx(ctx2D);
+                ctx2D.scale(dpr, dpr);
+            }
+
+            // 1D Canvas
+            const rect1D = canvas1D.getBoundingClientRect();
+            if (rect1D.width > 0 && rect1D.height > 0) {
+                canvas1D.width = Math.round(rect1D.width * dpr);
+                canvas1D.height = Math.round(rect1D.height * dpr);
+                resetCanvasCtx(ctx1D);
+                ctx1D.scale(dpr, dpr);
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
+
+        // Coordinate transforms for 2D map: maps CVRP domain [20, 140] to canvas width/height
+        const coordMin = 20;
+        const coordMax = 145;
+
+        function toCanvas2D(x, y, w, h) {
+            const pad = 35;
+            const cx = pad + ((x - coordMin) / (coordMax - coordMin)) * (w - 2 * pad);
+            const cy = pad + ((y - coordMin) / (coordMax - coordMin)) * (h - 2 * pad);
+            return { x: cx, y: cy };
+        }
+
+        function fromCanvas2D(cx, cy, w, h) {
+            const pad = 35;
+            const x = coordMin + ((cx - pad) / (w - 2 * pad)) * (coordMax - coordMin);
+            const y = coordMin + ((cy - pad) / (h - 2 * pad)) * (coordMax - coordMin);
+            return { x, y };
+        }
+
+        // ---------------------------------------------------------------------
+        // Interactive Controls & Event Listeners
+        // ---------------------------------------------------------------------
+        const sliderAlpha = document.getElementById('sliderAlpha');
+        const labelAlpha = document.getElementById('labelAlpha');
+        sliderAlpha?.addEventListener('input', (e) => {
+            state.alpha = parseFloat(e.target.value);
+            if (labelAlpha) labelAlpha.textContent = state.alpha.toFixed(3);
+            updateTelemetry();
+        });
+
+        const sliderGamma = document.getElementById('sliderGamma');
+        const labelGamma = document.getElementById('labelGamma');
+        sliderGamma?.addEventListener('input', (e) => {
+            state.gamma = parseFloat(e.target.value);
+            if (labelGamma) labelGamma.textContent = state.gamma.toFixed(2);
+        });
+
+        const sliderNoise = document.getElementById('sliderNoise');
+        const labelNoise = document.getElementById('labelNoise');
+        sliderNoise?.addEventListener('input', (e) => {
+            state.noise = parseFloat(e.target.value);
+            if (labelNoise) labelNoise.textContent = state.noise.toFixed(2);
+        });
+
+        // Click to reposition attractor on 2D canvas
+        canvas2D?.addEventListener('click', (e) => {
+            const rect = canvas2D.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const pt = fromCanvas2D(mouseX, mouseY, rect.width, rect.height);
+            state.attractor.x = pt.x;
+            state.attractor.y = pt.y;
+            state.gbest.x = pt.x;
+            state.gbest.y = pt.y;
+            logEvent(`Attractor p_local repositioned to coordinates (${pt.x.toFixed(1)}, ${pt.y.toFixed(1)})`, 'text-purple-700 font-medium');
+            sound.playJump();
+        });
+
+        // Trigger Quantum Jump Function
+        function triggerQuantumTunnel() {
+            state.tunnelingCount++;
+            sound.playJump();
+
+            // Pick a random particle and jump across barrier
+            const pIdx = Math.floor(Math.random() * state.particles.length);
+            const p = state.particles[pIdx];
+            const oldX = p.x;
+            const oldY = p.y;
+
+            // Target on opposite side of attractor
+            const angle = Math.random() * Math.PI * 2;
+            const dist = (20 + Math.random() * 35) * state.alpha;
+            p.targetX = state.attractor.x + Math.cos(angle) * dist;
+            p.targetY = state.attractor.y + Math.sin(angle) * dist;
+            p.x = p.targetX;
+            p.y = p.targetY;
+            p.targetVal1D = (Math.random() - 0.5) * 2.0 * state.alpha;
+            p.val1D = p.targetVal1D;
+
+            state.tunnelEvents.push({
+                fromX: oldX,
+                fromY: oldY,
+                toX: p.x,
+                toY: p.y,
+                alpha: 1.0,
+                particleId: p.id
+            });
+
+            // Show HUD banner
+            const banner = document.getElementById('tunnelEventBanner');
+            const bText = document.getElementById('bannerText');
+            if (banner && bText) {
+                bText.textContent = `⚡ Particle #${p.id} quantum tunneling barrier bypass to (${p.x.toFixed(1)}, ${p.y.toFixed(1)})`;
+                banner.classList.remove('opacity-0');
+                setTimeout(() => banner.classList.add('opacity-0'), 2500);
+            }
+
+            // Flash KPI card
+            const kpiCard = document.getElementById('tunnelingKpiCard');
+            if (kpiCard) {
+                kpiCard.classList.add('ring-2', 'ring-amber-400', 'bg-amber-100');
+                setTimeout(() => kpiCard.classList.remove('ring-2', 'ring-amber-400', 'bg-amber-100'), 350);
+            }
+
+            logEvent(`[t=${Date.now() % 1000}] ⚡ Particle #${p.id} tunneled past barrier: &Delta;E = ${(12 + Math.random() * 8).toFixed(1)} km`, 'text-amber-800 font-medium');
+            updateTelemetry();
+        }
+
+        document.getElementById('btnTriggerJump')?.addEventListener('click', triggerQuantumTunnel);
+        document.getElementById('btnInjectJump')?.addEventListener('click', triggerQuantumTunnel);
+
+        // Induce Wave Collapse
+        document.getElementById('btnCollapseWave')?.addEventListener('click', () => {
+            sound.playCollapse();
+            state.alpha = 0.40;
+            sliderAlpha.value = '0.40';
+            labelAlpha.textContent = '0.400';
+
+            // Collapse particles tightly into attractor
+            state.particles.forEach(p => {
+                p.x = state.attractor.x + (Math.random() - 0.5) * 6;
+                p.y = state.attractor.y + (Math.random() - 0.5) * 6;
+                p.val1D = (Math.random() - 0.5) * 0.5;
+            });
+
+            logEvent(`Ground state collapse induced: &alpha; &rarr; 0.400, Ground Eigenvalue Cost = 788.42 km`, 'text-emerald-700 font-medium');
+            updateTelemetry();
+        });
+
+        // Reset
+        document.getElementById('btnResetState')?.addEventListener('click', () => {
+            state.alpha = 0.85;
+            sliderAlpha.value = '0.85';
+            labelAlpha.textContent = '0.850';
+            state.attractor = { x: 82, y: 76 };
+            state.gbest = { x: 82, y: 76 };
+            for (let i = 0; i < state.numParticles; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 15 + Math.random() * 45;
+                state.particles[i].x = state.depot.x + Math.cos(angle) * dist;
+                state.particles[i].y = state.depot.y + Math.sin(angle) * dist;
+                state.particles[i].val1D = (Math.random() - 0.5) * 5.0;
+            }
+            logEvent(`Reset to initial superposition search space (M=40, Depot=(82, 76))`, 'text-cyan-800 font-medium');
+            updateTelemetry();
+        });
+
+        // Play/Pause
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const playPauseText = document.getElementById('playPauseText');
+        btnPlayPause?.addEventListener('click', () => {
+            state.running = !state.running;
+            if (playPauseText) playPauseText.textContent = state.running ? 'Pause Simulation' : 'Resume Simulation';
+            const icon = btnPlayPause.querySelector('i');
+            if (icon) icon.setAttribute('data-lucide', state.running ? 'pause' : 'play');
+            if (window.lucide) window.lucide.createIcons();
+        });
+
+        document.getElementById('btnToggle1DPhase')?.addEventListener('click', () => {
+            state.animating1DPhase = !state.animating1DPhase;
+        });
+
+        document.getElementById('soundToggleBtn')?.addEventListener('click', () => {
+            const isMuted = sound.toggle();
+            const btn = document.getElementById('soundToggleBtn');
+            if (btn) {
+                btn.innerHTML = `<i data-lucide="${isMuted ? 'volume-x' : 'volume-2'}" class="w-4 h-4"></i>`;
+                if (window.lucide) window.lucide.createIcons();
+            }
+        });
+
+        document.getElementById('btnClearLog')?.addEventListener('click', () => {
+            const consoleEl = document.getElementById('quantumConsole');
+            if (consoleEl) consoleEl.innerHTML = '';
+        });
+
+        function logEvent(msg, colorClass = 'text-cyan-800 font-medium') {
+            const consoleEl = document.getElementById('quantumConsole');
+            if (!consoleEl) return;
+            const item = document.createElement('div');
+            item.className = colorClass;
+            item.innerHTML = msg;
+            consoleEl.appendChild(item);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function updateTelemetry() {
+            // Update KPIs
+            const kpiCount = document.getElementById('kpiTunnelCount');
+            if (kpiCount) kpiCount.textContent = state.tunnelingCount;
+
+            const kpiTrans = document.getElementById('kpiTransmissionProb');
+            if (kpiTrans) {
+                const prob = (Math.exp(-1.4 * state.alpha) * 100).toFixed(1);
+                kpiTrans.textContent = `${prob}%`;
+            }
+
+            const kpiDisp = document.getElementById('kpiDispersion');
+            if (kpiDisp) {
+                const disp = (state.alpha * 2.53).toFixed(2);
+                kpiDisp.textContent = `\u00B1${disp}`;
+            }
+
+            const badge = document.getElementById('quantumStateBadge');
+            const c2dBadge = document.getElementById('canvas2dStatus');
+            if (state.alpha > 0.75) {
+                if (badge) {
+                    badge.textContent = 'Superposition Exploration';
+                    badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-cyan-50 text-cyan-700 border border-cyan-200';
+                }
+                if (c2dBadge) c2dBadge.textContent = 'Superposition Active';
+            } else if (state.alpha > 0.50) {
+                if (badge) {
+                    badge.textContent = 'Wavepacket Inversion';
+                    badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-purple-50 text-purple-700 border border-purple-200';
+                }
+                if (c2dBadge) c2dBadge.textContent = 'Wave Inversion Phase';
+            } else {
+                if (badge) {
+                    badge.textContent = 'Ground State Eigenvalue';
+                    badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+                }
+                if (c2dBadge) c2dBadge.textContent = 'Coherent Ground State';
+            }
+        }
+
+        // ---------------------------------------------------------------------
+        // 2D Spatial Quantum Wave Field Rendering Engine
+        // ---------------------------------------------------------------------
+        function render2DField() {
+            if (!canvas2D || !ctx2D) return;
+            const rect = canvas2D.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+            if (w <= 0 || h <= 0) return;
+
+            ctx2D.clearRect(0, 0, w, h);
+
+            // Studio Background (Dark vs Light)
+            ctx2D.fillStyle = isDarkMode ? '#020617' : '#f8fafc';
+            ctx2D.fillRect(0, 0, w, h);
+
+            // Coordinate Grid
+            ctx2D.strokeStyle = isDarkMode ? 'rgba(51, 65, 85, 0.4)' : 'rgba(0, 0, 0, 0.05)';
+            ctx2D.lineWidth = 1;
+            const step = 28;
+            for (let x = 0; x < w; x += step) {
+                ctx2D.beginPath();
+                ctx2D.moveTo(x, 0);
+                ctx2D.lineTo(x, h);
+                ctx2D.stroke();
+            }
+            for (let y = 0; y < h; y += step) {
+                ctx2D.beginPath();
+                ctx2D.moveTo(0, y);
+                ctx2D.lineTo(w, y);
+                ctx2D.stroke();
+            }
+
+            // 1. Draw Energy Barrier Zones (Forbidden Classical Obstacles)
+            state.barriers.forEach(barrier => {
+                const center = toCanvas2D(barrier.x, barrier.y, w, h);
+                const r = barrier.radius * (w / 400);
+
+                const bGrad = ctx2D.createRadialGradient(center.x, center.y, 0, center.x, center.y, r);
+                bGrad.addColorStop(0, isDarkMode ? 'rgba(244, 63, 94, 0.22)' : 'rgba(244, 63, 94, 0.12)');
+                bGrad.addColorStop(0.7, isDarkMode ? 'rgba(244, 63, 94, 0.08)' : 'rgba(244, 63, 94, 0.04)');
+                bGrad.addColorStop(1, 'rgba(244, 63, 94, 0.0)');
+
+                ctx2D.fillStyle = bGrad;
+                ctx2D.beginPath();
+                ctx2D.arc(center.x, center.y, r, 0, Math.PI * 2);
+                ctx2D.fill();
+
+                ctx2D.setLineDash([3, 3]);
+                ctx2D.strokeStyle = isDarkMode ? 'rgba(251, 113, 133, 0.7)' : 'rgba(225, 29, 72, 0.55)';
+                ctx2D.lineWidth = 1.2;
+                ctx2D.beginPath();
+                ctx2D.arc(center.x, center.y, r * 0.85, 0, Math.PI * 2);
+                ctx2D.stroke();
+                ctx2D.setLineDash([]);
+
+                // Label
+                ctx2D.fillStyle = isDarkMode ? '#fda4af' : '#be123c';
+                ctx2D.font = 'bold 9px "JetBrains Mono", monospace';
+                ctx2D.textAlign = 'center';
+                ctx2D.fillText(barrier.label, center.x, center.y + 3);
+            });
+
+            // 2. Draw Radial Probability Density Halos |\psi(x, y)|^2 around Ground State Depot
+            const depotCanvas = toCanvas2D(state.depot.x, state.depot.y, w, h);
+            const haloRadius = Math.max(25, 95 * state.alpha);
+            const pulse = 1.0 + 0.06 * Math.sin(state.phaseTime * 2);
+
+            const radialGrad = ctx2D.createRadialGradient(
+                depotCanvas.x, depotCanvas.y, 0,
+                depotCanvas.x, depotCanvas.y, haloRadius * pulse
+            );
+            radialGrad.addColorStop(0, isDarkMode ? 'rgba(6, 182, 212, 0.32)' : 'rgba(2, 132, 199, 0.22)');
+            radialGrad.addColorStop(0.4, isDarkMode ? 'rgba(99, 102, 241, 0.18)' : 'rgba(99, 102, 241, 0.10)');
+            radialGrad.addColorStop(0.8, isDarkMode ? 'rgba(168, 85, 247, 0.08)' : 'rgba(168, 85, 247, 0.04)');
+            radialGrad.addColorStop(1, 'rgba(2, 132, 199, 0.0)');
+
+            ctx2D.fillStyle = radialGrad;
+            ctx2D.beginPath();
+            ctx2D.arc(depotCanvas.x, depotCanvas.y, haloRadius * pulse, 0, Math.PI * 2);
+            ctx2D.fill();
+
+            // Concentric quantum probability rings
+            for (let ring = 1; ring <= 3; ring++) {
+                const ringR = (haloRadius * 0.35 * ring) * pulse;
+                ctx2D.strokeStyle = isDarkMode ? `rgba(34, 211, 238, ${0.45 - ring * 0.1})` : `rgba(2, 132, 199, ${0.35 - ring * 0.08})`;
+                ctx2D.lineWidth = 1;
+                ctx2D.beginPath();
+                ctx2D.arc(depotCanvas.x, depotCanvas.y, ringR, 0, Math.PI * 2);
+                ctx2D.stroke();
+            }
+
+            // 3. Render Active Tunneling Jump Trajectories
+            for (let i = state.tunnelEvents.length - 1; i >= 0; i--) {
+                const evt = state.tunnelEvents[i];
+                evt.alpha -= 0.018;
+                if (evt.alpha <= 0) {
+                    state.tunnelEvents.splice(i, 1);
+                    continue;
+                }
+
+                const fromPt = toCanvas2D(evt.fromX, evt.fromY, w, h);
+                const toPt = toCanvas2D(evt.toX, evt.toY, w, h);
+
+                ctx2D.save();
+                ctx2D.setLineDash([5, 4]);
+                ctx2D.strokeStyle = isDarkMode ? `rgba(56, 189, 248, ${evt.alpha * 0.95})` : `rgba(2, 132, 199, ${evt.alpha * 0.95})`;
+                ctx2D.lineWidth = 2.2;
+                ctx2D.shadowColor = isDarkMode ? 'rgba(56, 189, 248, 0.8)' : 'rgba(2, 132, 199, 0.3)';
+                ctx2D.shadowBlur = isDarkMode ? 10 : 6;
+
+                const midX = (fromPt.x + toPt.x) / 2 + (Math.sin(evt.alpha * 10) * 20);
+                const midY = (fromPt.y + toPt.y) / 2 - 30;
+
+                ctx2D.beginPath();
+                ctx2D.moveTo(fromPt.x, fromPt.y);
+                ctx2D.quadraticCurveTo(midX, midY, toPt.x, toPt.y);
+                ctx2D.stroke();
+
+                // Target landing ripple
+                ctx2D.setLineDash([]);
+                ctx2D.strokeStyle = isDarkMode ? `rgba(251, 191, 36, ${evt.alpha})` : `rgba(217, 119, 6, ${evt.alpha})`;
+                ctx2D.lineWidth = 1.5;
+                const ripR = (1 - evt.alpha) * 28;
+                ctx2D.beginPath();
+                ctx2D.arc(toPt.x, toPt.y, ripR, 0, Math.PI * 2);
+                ctx2D.stroke();
+                ctx2D.restore();
+            }
+
+            // 4. Render 40 Floating Swarm Particles with Soft Glow
+            state.particles.forEach(p => {
+                if (state.running) {
+                    const dx = state.attractor.x - p.x;
+                    const dy = state.attractor.y - p.y;
+                    const driftFactor = 0.015 * (1.1 - state.alpha * 0.5);
+                    const jitter = (Math.random() - 0.5) * state.noise * 1.5;
+                    p.x += dx * driftFactor + jitter;
+                    p.y += dy * driftFactor + jitter;
+                    p.val1D += (Math.random() - 0.5) * 0.08 * state.alpha;
+                }
+
+                const pt = toCanvas2D(p.x, p.y, w, h);
+
+                ctx2D.save();
+                ctx2D.fillStyle = isDarkMode ? '#22d3ee' : '#0284c7';
+                ctx2D.shadowColor = isDarkMode ? 'rgba(34, 211, 238, 0.8)' : 'rgba(2, 132, 199, 0.3)';
+                ctx2D.shadowBlur = isDarkMode ? 8 : 4;
+                ctx2D.beginPath();
+                ctx2D.arc(pt.x, pt.y, p.radius, 0, Math.PI * 2);
+                ctx2D.fill();
+                ctx2D.strokeStyle = '#ffffff';
+                ctx2D.lineWidth = 1;
+                ctx2D.stroke();
+
+                // Inner core
+                ctx2D.fillStyle = '#ffffff';
+                ctx2D.beginPath();
+                ctx2D.arc(pt.x, pt.y, p.radius * 0.45, 0, Math.PI * 2);
+                ctx2D.fill();
+                ctx2D.restore();
+            });
+
+            // 5. Render Central Depot Base Potential Well (82, 76)
+            ctx2D.save();
+            ctx2D.translate(depotCanvas.x, depotCanvas.y);
+            const dSize = 14;
+
+            ctx2D.beginPath();
+            ctx2D.moveTo(0, -dSize);
+            ctx2D.lineTo(dSize, 0);
+            ctx2D.lineTo(0, dSize);
+            ctx2D.lineTo(-dSize, 0);
+            ctx2D.closePath();
+
+            ctx2D.fillStyle = isDarkMode ? '#ef4444' : '#dc2626';
+            ctx2D.fill();
+            ctx2D.strokeStyle = '#ffffff';
+            ctx2D.lineWidth = 2;
+            ctx2D.shadowColor = isDarkMode ? 'rgba(239, 68, 68, 0.8)' : 'rgba(220, 38, 38, 0.35)';
+            ctx2D.shadowBlur = isDarkMode ? 12 : 8;
+            ctx2D.stroke();
+
+            ctx2D.fillStyle = '#ffffff';
+            ctx2D.beginPath();
+            ctx2D.arc(0, 0, 4, 0, Math.PI * 2);
+            ctx2D.fill();
+
+            // Label
+            ctx2D.fillStyle = isDarkMode ? '#f87171' : '#b91c1c';
+            ctx2D.font = 'bold 11px "JetBrains Mono", monospace';
+            ctx2D.textAlign = 'center';
+            ctx2D.fillText('DEPOT (0)', 0, -dSize - 5);
+            ctx2D.restore();
+
+            // 6. Stochastic Attractor Marker (p_local)
+            const attrCanvas = toCanvas2D(state.attractor.x, state.attractor.y, w, h);
+            ctx2D.strokeStyle = isDarkMode ? '#c084fc' : '#7c3aed';
+            ctx2D.lineWidth = 2;
+            ctx2D.setLineDash([3, 3]);
+            ctx2D.beginPath();
+            ctx2D.arc(attrCanvas.x, attrCanvas.y, 8, 0, Math.PI * 2);
+            ctx2D.stroke();
+            ctx2D.setLineDash([]);
+        }
+
+        // ---------------------------------------------------------------------
+        // 1D Schrödinger Potential Well & Wave Packet Rendering Engine
+        // ---------------------------------------------------------------------
+        function render1DWell() {
+            if (!canvas1D || !ctx1D) return;
+            const rect = canvas1D.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+            if (w <= 0 || h <= 0) return;
+
+            ctx1D.clearRect(0, 0, w, h);
+
+            // Studio Background
+            ctx1D.fillStyle = isDarkMode ? '#020617' : '#f8fafc';
+            ctx1D.fillRect(0, 0, w, h);
+
+            // Subtle Coordinate Grid
+            ctx1D.strokeStyle = isDarkMode ? 'rgba(51, 65, 85, 0.4)' : 'rgba(0, 0, 0, 0.05)';
+            ctx1D.lineWidth = 1;
+            const step = 28;
+            for (let x = 0; x < w; x += step) {
+                ctx1D.beginPath();
+                ctx1D.moveTo(x, 0);
+                ctx1D.lineTo(x, h);
+                ctx1D.stroke();
+            }
+            for (let y = 0; y < h; y += step) {
+                ctx1D.beginPath();
+                ctx1D.moveTo(0, y);
+                ctx1D.lineTo(w, y);
+                ctx1D.stroke();
+            }
+
+            const padX = 40;
+            const xMin = -5.0;
+            const xMax = 5.0;
+            const toScreen1D = (val) => padX + ((val - xMin) / (xMax - xMin)) * (w - 2 * padX);
+            const baselineY = h * 0.68;
+
+            // 1. Shaded Classical Forbidden Zone
+            const barrierSpread = Math.max(0.6, 1.6 * state.alpha);
+            const bLeft = toScreen1D(-barrierSpread);
+            const bRight = toScreen1D(barrierSpread);
+
+            const forbidGrad = ctx1D.createLinearGradient(0, 0, w, 0);
+            const forbidColor = isDarkMode ? 'rgba(239, 68, 68, 0.14)' : 'rgba(239, 68, 68, 0.08)';
+            const wellMidColor = isDarkMode ? 'rgba(34, 211, 238, 0.03)' : 'rgba(2, 132, 199, 0.02)';
+            forbidGrad.addColorStop(0, forbidColor);
+            forbidGrad.addColorStop(Math.max(0, bLeft / w), forbidColor);
+            forbidGrad.addColorStop(Math.max(0, (bLeft + 6) / w), wellMidColor);
+            forbidGrad.addColorStop(Math.min(1, (bRight - 6) / w), wellMidColor);
+            forbidGrad.addColorStop(Math.min(1, bRight / w), forbidColor);
+            forbidGrad.addColorStop(1, forbidColor);
+
+            ctx1D.fillStyle = forbidGrad;
+            ctx1D.fillRect(padX, 20, w - 2 * padX, baselineY - 20);
+
+            // Dashed turning point boundary lines
+            ctx1D.setLineDash([4, 4]);
+            ctx1D.strokeStyle = isDarkMode ? 'rgba(244, 63, 94, 0.7)' : 'rgba(225, 29, 72, 0.6)';
+            ctx1D.lineWidth = 1.2;
+            ctx1D.beginPath();
+            ctx1D.moveTo(bLeft, 20);
+            ctx1D.lineTo(bLeft, baselineY);
+            ctx1D.moveTo(bRight, 20);
+            ctx1D.lineTo(bRight, baselineY);
+            ctx1D.stroke();
+            ctx1D.setLineDash([]);
+
+            // 2. Dirac Delta-Potential Well Spike V(x) in Vivid Purple
+            const centerScreenX = toScreen1D(0);
+            ctx1D.beginPath();
+            ctx1D.strokeStyle = isDarkMode ? '#c084fc' : '#9333ea';
+            ctx1D.lineWidth = 2;
+
+            ctx1D.moveTo(padX, baselineY - 5);
+            for (let px = padX; px <= w - padX; px += 2) {
+                const distPx = Math.abs(px - centerScreenX);
+                const wellWidth = Math.max(8, 14 * state.alpha);
+                const wellDepth = (h * 0.28 * (state.gamma / 2.5)) / (1 + Math.pow(distPx / wellWidth, 2));
+                const py = baselineY - 5 + wellDepth;
+                ctx1D.lineTo(px, Math.min(h - 10, py));
+            }
+            ctx1D.stroke();
+
+            // 3. Double-Exponential Wave Packet |\psi(x)|^2 = (1/L) exp(-2|x-p|/L)
+            const L = Math.max(0.35, 1.4 * state.alpha);
+            const wavePoints = [];
+
+            for (let px = padX; px <= w - padX; px += 2) {
+                const coord = xMin + ((px - padX) / (w - 2 * padX)) * (xMax - xMin);
+                const dist = coord - 0;
+                const prob = Math.exp(-2 * Math.abs(dist) / L);
+
+                const phase = state.animating1DPhase ? Math.cos(dist * 3.2 - state.phaseTime) : 1;
+                const amp = 140 * Math.min(1.0, 0.75 + (1 - state.alpha) * 0.4);
+                const py = baselineY - prob * amp * (0.88 + 0.12 * phase);
+                wavePoints.push({ x: px, y: py });
+            }
+
+            // Fill Wave Under-Glow
+            if (wavePoints.length > 1) {
+                ctx1D.beginPath();
+                ctx1D.moveTo(wavePoints[0].x, baselineY);
+                for (const pt of wavePoints) {
+                    ctx1D.lineTo(pt.x, pt.y);
+                }
+                ctx1D.lineTo(wavePoints[wavePoints.length - 1].x, baselineY);
+                ctx1D.closePath();
+
+                const wGrad = ctx1D.createLinearGradient(0, baselineY - 140, 0, baselineY);
+                wGrad.addColorStop(0, isDarkMode ? 'rgba(34, 211, 238, 0.35)' : 'rgba(2, 132, 199, 0.28)');
+                wGrad.addColorStop(0.5, isDarkMode ? 'rgba(99, 102, 241, 0.15)' : 'rgba(99, 102, 241, 0.10)');
+                wGrad.addColorStop(1, 'rgba(2, 132, 199, 0.0)');
+                ctx1D.fillStyle = wGrad;
+                ctx1D.fill();
+
+                // Wave Crest Line
+                ctx1D.save();
+                ctx1D.beginPath();
+                ctx1D.strokeStyle = isDarkMode ? '#22d3ee' : '#0284c7';
+                ctx1D.lineWidth = 2.5;
+                ctx1D.shadowColor = isDarkMode ? 'rgba(34, 211, 238, 0.8)' : 'rgba(2, 132, 199, 0.3)';
+                ctx1D.shadowBlur = isDarkMode ? 10 : 6;
+                for (let i = 0; i < wavePoints.length; i++) {
+                    if (i === 0) ctx1D.moveTo(wavePoints[i].x, wavePoints[i].y);
+                    else ctx1D.lineTo(wavePoints[i].x, wavePoints[i].y);
+                }
+                ctx1D.stroke();
+                ctx1D.restore();
+            }
+
+            // 4. Attractor Line (p_local Center)
+            ctx1D.strokeStyle = isDarkMode ? '#c084fc' : '#7c3aed';
+            ctx1D.lineWidth = 2;
+            ctx1D.beginPath();
+            ctx1D.moveTo(centerScreenX, 25);
+            ctx1D.lineTo(centerScreenX, baselineY + 12);
+            ctx1D.stroke();
+
+            ctx1D.fillStyle = isDarkMode ? '#c084fc' : '#7c3aed';
+            ctx1D.beginPath();
+            ctx1D.arc(centerScreenX, 25, 4, 0, Math.PI * 2);
+            ctx1D.fill();
+
+            // 5. Particles Positioned along the Probability Curve
+            state.particles.forEach(p => {
+                const px = toScreen1D(p.val1D);
+                if (px < padX || px > w - padX) return;
+
+                const dist = p.val1D - 0;
+                const prob = Math.exp(-2 * Math.abs(dist) / L);
+                const amp = 140 * Math.min(1.0, 0.75 + (1 - state.alpha) * 0.4);
+                const py = baselineY - prob * amp;
+
+                ctx1D.save();
+                ctx1D.fillStyle = isDarkMode ? '#22d3ee' : '#0284c7';
+                ctx1D.shadowColor = isDarkMode ? 'rgba(34, 211, 238, 0.8)' : 'rgba(2, 132, 199, 0.3)';
+                ctx1D.shadowBlur = isDarkMode ? 8 : 4;
+                ctx1D.beginPath();
+                ctx1D.arc(px, py, 3.5, 0, Math.PI * 2);
+                ctx1D.fill();
+                ctx1D.strokeStyle = '#ffffff';
+                ctx1D.lineWidth = 1;
+                ctx1D.stroke();
+                ctx1D.restore();
+            });
+
+            // Baseline Ground Axis
+            ctx1D.strokeStyle = isDarkMode ? 'rgba(148, 163, 184, 0.3)' : 'rgba(148, 163, 184, 0.6)';
+            ctx1D.lineWidth = 1;
+            ctx1D.beginPath();
+            ctx1D.moveTo(padX, baselineY);
+            ctx1D.lineTo(w - padX, baselineY);
+            ctx1D.stroke();
+
+            ctx1D.font = '10px "JetBrains Mono", monospace';
+            ctx1D.fillStyle = isDarkMode ? '#94a3b8' : '#475569';
+            ctx1D.textAlign = 'center';
+            for (let coord = -4; coord <= 4; coord += 2) {
+                const lx = toScreen1D(coord);
+                ctx1D.fillText(`${coord > 0 ? '+' : ''}${coord}`, lx, baselineY + 15);
+                ctx1D.beginPath();
+                ctx1D.moveTo(lx, baselineY);
+                ctx1D.lineTo(lx, baselineY + 4);
+                ctx1D.stroke();
+            }
+        }
+
+        // ---------------------------------------------------------------------
+        // 60 FPS Animation Master Loop
+        // ---------------------------------------------------------------------
+        let lastAutoTunnel = performance.now();
+
+        function animate(timestamp) {
+            state.phaseTime += 0.035;
+
+            // Occasional automatic stochastic tunneling jump in running mode
+            if (state.running && timestamp - lastAutoTunnel > 4500) {
+                triggerQuantumTunnel();
+                lastAutoTunnel = timestamp;
+            }
+
+            render2DField();
+            render1DWell();
+
+            requestAnimationFrame(animate);
+        }
+
+        // Start 60 FPS Loop
+        requestAnimationFrame(animate);
+
+        // Initial setup
+        applyTheme(isDarkMode);
+        updateTelemetry();
+        if (window.lucide) window.lucide.createIcons();
+
+    })();
+    </script>
+</body>
+</html>
