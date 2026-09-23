@@ -844,18 +844,8 @@ def build_deck():
 
 
 if __name__ == '__main__':
-    target_locations = [
-        '/Users/prajanradhakrishnan/.gemini/antigravity/scratch/qpso-fleet-optimizer-v2/SIH_2026_Quantum_Fleet_Optimizer_Presentation.pptx',
-        '/Users/prajanradhakrishnan/.gemini/antigravity/scratch/qpso-fleet-optimizer-v2/SIH_2026_QPSO_CVRP_Presentation.pptx',
-        '/Users/prajanradhakrishnan/.gemini/antigravity/scratch/qpso-fleet-optimizer/SIH_2026_Quantum_Fleet_Optimizer_Presentation.pptx',
-        '/Users/prajanradhakrishnan/.gemini/antigravity/scratch/qpso-fleet-optimizer/SIH_2026_QPSO_CVRP_Presentation.pptx'
-    ]
-
+    out_path = os.path.join(workspace_dir, 'SIH_2026_QPSO_CVRP_Presentation.pptx')
     deck = build_deck()
-
-    for out_path in target_locations:
-        os.makedirs(os.path.dirname(out_path), exist_ok=True)
-        deck.save(out_path)
-        print(f"✔ Presentation deck successfully saved to: {out_path}")
-
+    deck.save(out_path)
+    print(f"✔ Presentation deck successfully saved to: {out_path}")
     print(f"\n🎉 Successfully generated SIH 2026 presentation deck ({len(deck.slides)} slides) adhering to official template!")

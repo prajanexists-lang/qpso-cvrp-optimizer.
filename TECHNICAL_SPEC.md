@@ -1,5 +1,8 @@
 # Mathematical Specification & Algorithmic Formulation
 ## Quantum-Behaved Swarm Optimization for Capacitated Vehicle Routing
+> **Smart India Hackathon (SIH 2026) Submission**  
+> **Problem Statement ID:** `26137` | **Theme:** Transportation & Logistics (Quantum Technology Vertical)  
+> **Team Name:** `CodeROX` | **Software Platform:** Quantum Fleet Optimizer
 
 ---
 

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "framework": null,
+  "buildCommand": null,
+  "installCommand": null,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/home", "destination": "/index.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/quantum", "destination": "/quantum.html" },
+    { "source": "/quantum-lab", "destination": "/quantum.html" },
+    { "source": "/quantum-labs", "destination": "/quantum.html" },
+    { "source": "/quantum_lab", "destination": "/quantum.html" },
+    { "source": "/quantum_labs", "destination": "/quantum.html" },
+    { "source": "/quantumlab", "destination": "/quantum.html" },
+    { "source": "/quantumlabs", "destination": "/quantum.html" },
+    { "source": "/docs", "destination": "/docs.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/pitch", "destination": "/pitch_script.html" },
+    { "source": "/pitch_script", "destination": "/pitch_script.html" },
+    { "source": "/presentation", "destination": "/sih_presentation.html" }
+  ]
+}

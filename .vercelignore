@@ -1,0 +1,14 @@
+# Vercel Ignore File
+# Ignore Python scripts and dependency manifests so Vercel treats this repository
+# purely as an ultra-fast, zero-build static web platform.
+
+requirements.txt
+app.py
+server.py
+benchmark_harness.py
+solver_engine.py
+build_sih_presentation.py
+lib/
+__pycache__/
+*.pyc
+.devcontainer/

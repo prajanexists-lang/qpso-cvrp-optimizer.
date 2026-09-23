@@ -30,7 +30,6 @@ class SmartHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             'about': 'about.html',
             'pitch': 'pitch_script.html',
             'pitch_script': 'pitch_script.html',
-            'compare': 'compare.html',
             'presentation': 'sih_presentation.html',
         }
 
