@@ -13,7 +13,7 @@
   <strong>A physics-informed metaheuristic routing platform combining 1D Schrödinger Delta-Well QPSO wave mechanics, dynamic BPR road impedance modeling, and linear-time Prins DAG tour partitioning for real-time sustainable urban fleet logistics.</strong>
 </p>
 
-[✨ Live Home](index.html) • [🚀 Route Dashboard](dashboard.html) • [🔬 Quantum Lab](quantum.html) • [📊 Official SIH Presentation](sih_presentation.html) • [📖 Documentation](docs.html) • [📋 About & Deliverables](about.html)
+[✨ Live Home](index.html) • [🚀 Route Dashboard](dashboard.html) • [🔬 Quantum Lab](quantum.html) • [📖 Documentation](docs.html) • [📋 About & Deliverables](about.html)
 
 ---
 
